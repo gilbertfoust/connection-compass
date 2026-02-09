@@ -16,6 +16,8 @@ export const useBudget = () => {
   const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
 
+  const hasCoupleId = !!coupleId;
+
   // Fetch all budgets
   const fetchBudgets = useCallback(async () => {
     if (!coupleId) { setBudgets([]); setLoading(false); return; }
@@ -178,7 +180,7 @@ export const useBudget = () => {
   const unallocated = (currentBudget?.total_income || 0) - totalPlanned;
 
   return {
-    budgets, currentBudget, items, loading,
+    budgets, currentBudget, items, loading, hasCoupleId,
     selectedMonth, selectedYear, setSelectedMonth, setSelectedYear,
     createBudget, updateIncome, addItem, updateItem, deleteItem, deleteBudget,
     totalPlanned, totalActual, totalSavingsPlanned, totalSavingsActual,
