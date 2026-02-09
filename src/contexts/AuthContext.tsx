@@ -8,6 +8,7 @@ interface Profile {
   display_name: string | null;
   couple_id: string | null;
   invite_code: string | null;
+  gender: string | null;
   created_at: string;
   updated_at: string;
 }

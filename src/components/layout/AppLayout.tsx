@@ -1,7 +1,8 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Heart, Home, MessageCircle, ClipboardList, Sprout, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import CherryBlossomBackground from './CherryBlossomBackground';
 
 const navItems = [
   { path: '/', icon: Home, label: 'Today' },
@@ -17,10 +18,23 @@ interface AppLayoutProps {
 const AppLayout = ({ children }: AppLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { signOut } = useAuth();
+  const { signOut, profile } = useAuth();
+  const isMasculine = profile?.gender === 'male';
+
+  // Apply gender-adaptive theme class to body
+  useEffect(() => {
+    if (isMasculine) {
+      document.body.classList.add('theme-masculine');
+    } else {
+      document.body.classList.remove('theme-masculine');
+    }
+    return () => document.body.classList.remove('theme-masculine');
+  }, [isMasculine]);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col relative">
+      <CherryBlossomBackground />
+
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/50 px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center justify-between">

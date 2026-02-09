@@ -277,6 +277,7 @@ export type Database = {
           couple_id: string | null
           created_at: string
           display_name: string | null
+          gender: string | null
           id: string
           invite_code: string | null
           updated_at: string
@@ -286,6 +287,7 @@ export type Database = {
           couple_id?: string | null
           created_at?: string
           display_name?: string | null
+          gender?: string | null
           id?: string
           invite_code?: string | null
           updated_at?: string
@@ -295,6 +297,7 @@ export type Database = {
           couple_id?: string | null
           created_at?: string
           display_name?: string | null
+          gender?: string | null
           id?: string
           invite_code?: string | null
           updated_at?: string
