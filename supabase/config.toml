@@ -2,3 +2,12 @@ project_id = "ddilxlabiifszdsfyqqk"
 
 [functions.analyze-conversation]
 verify_jwt = false
+
+[functions.suggest-dates]
+verify_jwt = false
+
+[functions.generate-vision-board]
+verify_jwt = false
+
+[functions.analyze-triggers]
+verify_jwt = false

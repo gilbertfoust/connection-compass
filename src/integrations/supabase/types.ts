@@ -348,6 +348,51 @@ export type Database = {
           },
         ]
       }
+      trigger_profiles: {
+        Row: {
+          childhood_triggers: Json
+          conflict_style: string
+          couple_id: string
+          created_at: string
+          emotional_triggers: Json
+          hangups: Json
+          id: string
+          misread_signals: string
+          needs_when_triggered: string
+          stress_response: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          childhood_triggers?: Json
+          conflict_style?: string
+          couple_id: string
+          created_at?: string
+          emotional_triggers?: Json
+          hangups?: Json
+          id?: string
+          misread_signals?: string
+          needs_when_triggered?: string
+          stress_response?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          childhood_triggers?: Json
+          conflict_style?: string
+          couple_id?: string
+          created_at?: string
+          emotional_triggers?: Json
+          hangups?: Json
+          id?: string
+          misread_signals?: string
+          needs_when_triggered?: string
+          stress_response?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       vision_items: {
         Row: {
           color: string | null
