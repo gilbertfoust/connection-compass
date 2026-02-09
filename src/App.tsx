@@ -11,6 +11,7 @@ import DateNightPage from "./pages/DateNightPage";
 import InsightCenterPage from "./pages/InsightCenterPage";
 import PlanPage from "./pages/PlanPage";
 import VisionBoardPage from "./pages/VisionBoardPage";
+import CalendarPage from "./pages/CalendarPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/insights" element={<InsightCenterPage />} />
             <Route path="/plan" element={<PlanPage />} />
             <Route path="/vision" element={<VisionBoardPage />} />
+            <Route path="/calendar" element={<CalendarPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AppLayout>
