@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Heart, Home, MessageCircle, Gamepad2, CalendarHeart, Compass, DollarSign, LogOut } from 'lucide-react';
+import { Heart, Home, MessageCircle, Gamepad2, CalendarHeart, Compass, DollarSign, LogOut, HeartHandshake } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface AppLayoutProps {
@@ -13,7 +13,7 @@ const navItems = [
   { path: '/activities', icon: Gamepad2, label: 'Play' },
   { path: '/date-night', icon: CalendarHeart, label: 'Date' },
   { path: '/budget', icon: DollarSign, label: 'Budget' },
-  { path: '/insights', icon: Compass, label: 'Insights' },
+  { path: '/love-languages', icon: HeartHandshake, label: 'Love' },
 ];
 
 const AppLayout = ({ children }: AppLayoutProps) => {
