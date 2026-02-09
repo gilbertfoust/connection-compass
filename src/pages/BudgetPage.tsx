@@ -1,4 +1,4 @@
-import { DollarSign, BarChart3, History } from 'lucide-react';
+import { DollarSign, BarChart3, History, Users } from 'lucide-react';
 import { useBudget } from '@/hooks/useBudget';
 import { useBudgetHistory } from '@/hooks/useBudgetHistory';
 import BudgetSetup from '@/components/budget/BudgetSetup';
@@ -8,10 +8,13 @@ import BudgetTrendChart from '@/components/budget/BudgetTrendChart';
 import BudgetSpendingBreakdown from '@/components/budget/BudgetSpendingBreakdown';
 import BudgetHistoryList from '@/components/budget/BudgetHistoryList';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 const BudgetPage = () => {
   const {
-    currentBudget, items, loading,
+    currentBudget, items, loading, hasCoupleId,
     selectedMonth, selectedYear, setSelectedMonth, setSelectedYear,
     createBudget, updateIncome, addItem, updateItem, deleteItem, deleteBudget,
     totalPlanned, totalActual, totalSavingsPlanned, totalSavingsActual,
@@ -19,11 +22,42 @@ const BudgetPage = () => {
   } = useBudget();
 
   const { snapshots, loading: historyLoading } = useBudgetHistory();
+  const navigate = useNavigate();
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!hasCoupleId) {
+    return (
+      <div className="space-y-5">
+        <div>
+          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+            <DollarSign className="h-5 w-5 text-primary" />
+            Couple Budget
+          </h2>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            Track spending, set goals, and build financial harmony together
+          </p>
+        </div>
+        <Card>
+          <CardContent className="p-6 text-center space-y-4">
+            <Users className="h-10 w-10 text-muted-foreground mx-auto" />
+            <div>
+              <h3 className="font-semibold text-foreground">Link a Partner First</h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                The budget feature requires you to be linked with your partner. Share your invite code or enter theirs to get started.
+              </p>
+            </div>
+            <Button onClick={() => navigate('/partner')}>
+              Go to Partner Link
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
