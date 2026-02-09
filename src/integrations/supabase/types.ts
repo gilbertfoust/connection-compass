@@ -14,6 +14,101 @@ export type Database = {
   }
   public: {
     Tables: {
+      budget_items: {
+        Row: {
+          actual_amount: number
+          budget_id: string
+          category: string
+          couple_id: string
+          created_at: string
+          id: string
+          name: string
+          planned_amount: number
+          type: string
+        }
+        Insert: {
+          actual_amount?: number
+          budget_id: string
+          category: string
+          couple_id: string
+          created_at?: string
+          id?: string
+          name: string
+          planned_amount?: number
+          type?: string
+        }
+        Update: {
+          actual_amount?: number
+          budget_id?: string
+          category?: string
+          couple_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+          planned_amount?: number
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budget_items_budget_id_fkey"
+            columns: ["budget_id"]
+            isOneToOne: false
+            referencedRelation: "budgets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_items_couple_id_fkey"
+            columns: ["couple_id"]
+            isOneToOne: false
+            referencedRelation: "couples"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      budgets: {
+        Row: {
+          couple_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          month: number
+          template: string
+          total_income: number
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          couple_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          month: number
+          template?: string
+          total_income?: number
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          couple_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          month?: number
+          template?: string
+          total_income?: number
+          updated_at?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budgets_couple_id_fkey"
+            columns: ["couple_id"]
+            isOneToOne: false
+            referencedRelation: "couples"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       calendar_events: {
         Row: {
           category: string
