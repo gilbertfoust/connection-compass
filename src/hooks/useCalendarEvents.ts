@@ -9,6 +9,7 @@ export const useCalendarEvents = () => {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<EventCategory | 'all'>('all');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const mapDbEvent = (e: any): CalendarEvent => ({
     id: e.id,
@@ -37,8 +38,10 @@ export const useCalendarEvents = () => {
 
     if (error) {
       console.error('Error fetching events:', error);
+      setError(error.message);
     } else {
       setEvents((data || []).map(mapDbEvent));
+      setError(null);
     }
     setLoading(false);
   }, [coupleId]);
@@ -165,5 +168,7 @@ export const useCalendarEvents = () => {
     getUpcomingEvents,
     getDatesWithEvents,
     loading,
+    error,
+    refetch: fetchEvents,
   };
 };

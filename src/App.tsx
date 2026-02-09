@@ -8,10 +8,9 @@ import AppLayout from "@/components/layout/AppLayout";
 import HomePage from "./pages/HomePage";
 import EngagePage from "./pages/EngagePage";
 import PlanHubPage from "./pages/PlanHubPage";
-import GrowPage from "./pages/GrowPage";
+import InsightPage from "./pages/InsightPage";
 import AuthPage from "./pages/AuthPage";
-import PartnerLinkPage from "./pages/PartnerLinkPage";
-import MyProfilePage from "./pages/MyProfilePage";
+import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,9 +39,12 @@ const ProtectedRoutes = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/engage" element={<EngagePage />} />
         <Route path="/plan" element={<PlanHubPage />} />
-        <Route path="/grow" element={<GrowPage />} />
-        <Route path="/partner" element={<PartnerLinkPage />} />
-        <Route path="/profile" element={<MyProfilePage />} />
+        <Route path="/insight" element={<InsightPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        {/* Legacy redirects */}
+        <Route path="/grow" element={<Navigate to="/insight" replace />} />
+        <Route path="/partner" element={<Navigate to="/settings" replace />} />
+        <Route path="/profile" element={<Navigate to="/settings" replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AppLayout>

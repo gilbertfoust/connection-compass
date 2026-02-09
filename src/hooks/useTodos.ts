@@ -8,6 +8,7 @@ export const useTodos = () => {
   const { coupleId, user } = useAuth();
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const mapDbTodo = (t: any): Todo => ({
     id: t.id,
@@ -31,8 +32,10 @@ export const useTodos = () => {
 
     if (error) {
       console.error('Error fetching todos:', error);
+      setError(error.message);
     } else {
       setTodos((data || []).map(mapDbTodo));
+      setError(null);
     }
     setLoading(false);
   }, [coupleId]);
@@ -106,5 +109,5 @@ export const useTodos = () => {
   const completedCount = todos.filter((t) => t.completed).length;
   const totalCount = todos.length;
 
-  return { todos, addTodo, toggleTodo, deleteTodo, completedCount, totalCount, loading };
+  return { todos, addTodo, toggleTodo, deleteTodo, completedCount, totalCount, loading, error, refetch: fetchTodos };
 };

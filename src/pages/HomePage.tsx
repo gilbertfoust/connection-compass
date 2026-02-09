@@ -1,8 +1,9 @@
 import { useAuth } from '@/contexts/AuthContext';
 import DailyCheckIn from '@/components/home/DailyCheckIn';
-import QuestionOfTheDay from '@/components/home/QuestionOfTheDay';
+import ConnectionRitual from '@/components/home/ConnectionRitual';
 import SuggestedAction from '@/components/home/SuggestedAction';
 import DailyReflection from '@/components/home/DailyReflection';
+import UpcomingEventCard from '@/components/home/UpcomingEventCard';
 import StreakCounter from '@/components/home/StreakCounter';
 import PartnerBanner from '@/components/home/PartnerBanner';
 import ProfilePromptCard from '@/components/home/ProfilePromptCard';
@@ -25,7 +26,7 @@ const HomePage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-background/20 to-background flex items-end p-5">
           <div>
             <h2 className="text-xl font-bold text-foreground">Hey, {displayName} 💕</h2>
-            <p className="text-sm text-muted-foreground mt-0.5">Let's grow closer today</p>
+            <p className="text-sm text-muted-foreground mt-0.5">Let's connect today</p>
           </div>
         </div>
       </div>
@@ -41,10 +42,11 @@ const HomePage = () => {
         <StreakCounter />
       </div>
 
-      {/* Daily Core Loop */}
+      {/* Daily Core Loop — Connection Ritual */}
       <DailyCheckIn />
-      <QuestionOfTheDay />
+      <ConnectionRitual />
       <SuggestedAction />
+      <UpcomingEventCard />
       <DailyReflection />
     </div>
   );

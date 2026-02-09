@@ -27,7 +27,7 @@ const ProfilePromptCard = () => {
             </div>
             <Button
               size="sm"
-              onClick={() => navigate('/profile')}
+              onClick={() => navigate('/settings')}
               className="text-xs"
             >
               {profile ? 'Continue Setup' : 'Get Started'}
