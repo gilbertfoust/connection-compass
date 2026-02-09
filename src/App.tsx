@@ -11,6 +11,7 @@ import PlanHubPage from "./pages/PlanHubPage";
 import GrowPage from "./pages/GrowPage";
 import AuthPage from "./pages/AuthPage";
 import PartnerLinkPage from "./pages/PartnerLinkPage";
+import MyProfilePage from "./pages/MyProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const ProtectedRoutes = () => {
         <Route path="/plan" element={<PlanHubPage />} />
         <Route path="/grow" element={<GrowPage />} />
         <Route path="/partner" element={<PartnerLinkPage />} />
+        <Route path="/profile" element={<MyProfilePage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AppLayout>
