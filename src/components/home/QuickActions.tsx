@@ -1,18 +1,19 @@
 import { useNavigate } from 'react-router-dom';
-import { MessageCircle, Gamepad2, CalendarHeart, Target } from 'lucide-react';
+import { MessageCircle, Gamepad2, CalendarHeart, ClipboardList, Compass } from 'lucide-react';
 
 const actions = [
   { icon: MessageCircle, label: 'Talk', path: '/engagement', color: 'bg-primary/10 text-primary' },
   { icon: Gamepad2, label: 'Play', path: '/activities', color: 'bg-chart-1/10 text-chart-1' },
   { icon: CalendarHeart, label: 'Date', path: '/date-night', color: 'bg-chart-2/10 text-chart-2' },
-  { icon: Target, label: 'Goals', path: '/engagement', color: 'bg-chart-5/10 text-chart-5' },
+  { icon: ClipboardList, label: 'Plan', path: '/plan', color: 'bg-chart-5/10 text-chart-5' },
+  { icon: Compass, label: 'Insights', path: '/insights', color: 'bg-chart-3/10 text-chart-3' },
 ];
 
 const QuickActions = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="grid grid-cols-4 gap-3">
+    <div className="grid grid-cols-5 gap-2">
       {actions.map((action) => {
         const Icon = action.icon;
         return (

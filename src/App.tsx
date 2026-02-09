@@ -9,6 +9,7 @@ import EngagementHub from "./pages/EngagementHub";
 import ActivitiesPage from "./pages/ActivitiesPage";
 import DateNightPage from "./pages/DateNightPage";
 import InsightCenterPage from "./pages/InsightCenterPage";
+import PlanPage from "./pages/PlanPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/activities" element={<ActivitiesPage />} />
             <Route path="/date-night" element={<DateNightPage />} />
             <Route path="/insights" element={<InsightCenterPage />} />
+            <Route path="/plan" element={<PlanPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AppLayout>
