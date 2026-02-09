@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Heart, Home, MessageCircle, Gamepad2, CalendarHeart } from 'lucide-react';
+import { Heart, Home, MessageCircle, Gamepad2, CalendarHeart, Compass } from 'lucide-react';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -11,6 +11,7 @@ const navItems = [
   { path: '/engagement', icon: MessageCircle, label: 'Talk' },
   { path: '/activities', icon: Gamepad2, label: 'Play' },
   { path: '/date-night', icon: CalendarHeart, label: 'Date' },
+  { path: '/insights', icon: Compass, label: 'Insights' },
 ];
 
 const AppLayout = ({ children }: AppLayoutProps) => {
