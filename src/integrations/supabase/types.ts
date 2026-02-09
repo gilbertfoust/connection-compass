@@ -272,6 +272,74 @@ export type Database = {
         }
         Relationships: []
       }
+      personal_profiles: {
+        Row: {
+          appreciation_style: string
+          communication_style: string
+          completed: boolean
+          couple_id: string | null
+          created_at: string
+          dreams_and_aspirations: string
+          growth_areas: Json
+          id: string
+          ideal_date: string
+          interests: Json
+          quality_time_preferences: Json
+          relationship_goals: string
+          relationship_strengths: Json
+          stress_relief: string
+          updated_at: string
+          user_id: string
+          values: Json
+        }
+        Insert: {
+          appreciation_style?: string
+          communication_style?: string
+          completed?: boolean
+          couple_id?: string | null
+          created_at?: string
+          dreams_and_aspirations?: string
+          growth_areas?: Json
+          id?: string
+          ideal_date?: string
+          interests?: Json
+          quality_time_preferences?: Json
+          relationship_goals?: string
+          relationship_strengths?: Json
+          stress_relief?: string
+          updated_at?: string
+          user_id: string
+          values?: Json
+        }
+        Update: {
+          appreciation_style?: string
+          communication_style?: string
+          completed?: boolean
+          couple_id?: string | null
+          created_at?: string
+          dreams_and_aspirations?: string
+          growth_areas?: Json
+          id?: string
+          ideal_date?: string
+          interests?: Json
+          quality_time_preferences?: Json
+          relationship_goals?: string
+          relationship_strengths?: Json
+          stress_relief?: string
+          updated_at?: string
+          user_id?: string
+          values?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "personal_profiles_couple_id_fkey"
+            columns: ["couple_id"]
+            isOneToOne: false
+            referencedRelation: "couples"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           couple_id: string | null

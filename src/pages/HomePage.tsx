@@ -5,6 +5,7 @@ import SuggestedAction from '@/components/home/SuggestedAction';
 import DailyReflection from '@/components/home/DailyReflection';
 import StreakCounter from '@/components/home/StreakCounter';
 import PartnerBanner from '@/components/home/PartnerBanner';
+import ProfilePromptCard from '@/components/home/ProfilePromptCard';
 import heroBg from '@/assets/hero-bg.jpg';
 
 const HomePage = () => {
@@ -31,6 +32,9 @@ const HomePage = () => {
 
       {/* Partner Link Banner */}
       <PartnerBanner />
+
+      {/* Profile Setup Prompt */}
+      <ProfilePromptCard />
 
       {/* Streak */}
       <div className="flex justify-center">
