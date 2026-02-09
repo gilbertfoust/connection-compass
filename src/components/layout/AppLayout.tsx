@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Heart, Home, MessageCircle, Gamepad2, CalendarHeart, Compass } from 'lucide-react';
+import { Heart, Home, MessageCircle, Gamepad2, CalendarHeart, Compass, LogOut } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -17,14 +18,25 @@ const navItems = [
 const AppLayout = ({ children }: AppLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/50 px-4 py-3">
-        <div className="max-w-lg mx-auto flex items-center justify-center gap-2">
-          <Heart className="h-5 w-5 text-primary fill-primary" />
-          <h1 className="text-lg font-semibold text-foreground tracking-tight">TheMoreLoveApp</h1>
+        <div className="max-w-lg mx-auto flex items-center justify-between">
+          <div className="w-8" />
+          <div className="flex items-center gap-2">
+            <Heart className="h-5 w-5 text-primary fill-primary" />
+            <h1 className="text-lg font-semibold text-foreground tracking-tight">TheMoreLoveApp</h1>
+          </div>
+          <button
+            onClick={signOut}
+            className="p-2 rounded-full hover:bg-accent transition-colors"
+            title="Sign out"
+          >
+            <LogOut className="h-4 w-4 text-muted-foreground" />
+          </button>
         </div>
       </header>
 

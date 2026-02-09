@@ -1,10 +1,15 @@
+import { useAuth } from '@/contexts/AuthContext';
 import QuestionOfTheDay from '@/components/home/QuestionOfTheDay';
 import StreakCounter from '@/components/home/StreakCounter';
 import QuickActions from '@/components/home/QuickActions';
 import RecommendedCard from '@/components/home/RecommendedCard';
+import PartnerBanner from '@/components/home/PartnerBanner';
 import heroBg from '@/assets/hero-bg.jpg';
 
 const HomePage = () => {
+  const { profile } = useAuth();
+  const displayName = profile?.display_name || 'there';
+
   return (
     <div className="space-y-6">
       {/* Hero Section */}
@@ -17,11 +22,14 @@ const HomePage = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/20 to-background flex items-end p-5">
           <div>
-            <h2 className="text-xl font-bold text-foreground">Welcome back 💕</h2>
+            <h2 className="text-xl font-bold text-foreground">Hey, {displayName} 💕</h2>
             <p className="text-sm text-muted-foreground mt-0.5">Let's grow closer today</p>
           </div>
         </div>
       </div>
+
+      {/* Partner Link Banner */}
+      <PartnerBanner />
 
       {/* Streak */}
       <div className="flex justify-center">
