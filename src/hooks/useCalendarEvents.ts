@@ -47,6 +47,37 @@ export const useCalendarEvents = () => {
     fetchEvents();
   }, [fetchEvents]);
 
+  // Real-time subscription
+  useEffect(() => {
+    if (!coupleId) return;
+
+    const channel = supabase
+      .channel('calendar-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'calendar_events', filter: `couple_id=eq.${coupleId}` },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setEvents((prev) => {
+              if (prev.some((e) => e.id === (payload.new as any).id)) return prev;
+              return [...prev, mapDbEvent(payload.new)].sort((a, b) => a.date.localeCompare(b.date));
+            });
+          } else if (payload.eventType === 'UPDATE') {
+            setEvents((prev) =>
+              prev.map((e) => (e.id === (payload.new as any).id ? mapDbEvent(payload.new) : e))
+            );
+          } else if (payload.eventType === 'DELETE') {
+            setEvents((prev) => prev.filter((e) => e.id !== (payload.old as any).id));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [coupleId]);
+
   const addEvent = useCallback(async (event: Omit<CalendarEvent, 'id' | 'createdAt' | 'completed'>) => {
     if (!coupleId || !user) {
       toast({ title: 'Link a partner first', description: 'You need to link with a partner before adding shared items.', variant: 'destructive' });
@@ -65,10 +96,8 @@ export const useCalendarEvents = () => {
     });
     if (error) {
       toast({ title: 'Error', description: error.message, variant: 'destructive' });
-    } else {
-      await fetchEvents();
     }
-  }, [coupleId, user, fetchEvents]);
+  }, [coupleId, user]);
 
   const updateEvent = useCallback(async (id: string, updates: Partial<CalendarEvent>) => {
     const dbUpdates: Record<string, any> = {};
@@ -82,20 +111,12 @@ export const useCalendarEvents = () => {
     if (updates.completed !== undefined) dbUpdates.completed = updates.completed;
 
     const { error } = await supabase.from('calendar_events').update(dbUpdates).eq('id', id);
-    if (error) {
-      console.error('Error updating event:', error);
-    } else {
-      setEvents((prev) => prev.map((e) => (e.id === id ? { ...e, ...updates } : e)));
-    }
+    if (error) console.error('Error updating event:', error);
   }, []);
 
   const deleteEvent = useCallback(async (id: string) => {
     const { error } = await supabase.from('calendar_events').delete().eq('id', id);
-    if (error) {
-      console.error('Error deleting event:', error);
-    } else {
-      setEvents((prev) => prev.filter((e) => e.id !== id));
-    }
+    if (error) console.error('Error deleting event:', error);
   }, []);
 
   const toggleComplete = useCallback(async (id: string) => {

@@ -52,6 +52,59 @@ export const useVisionBoard = () => {
     fetchItems();
   }, [fetchItems]);
 
+  // Real-time subscription
+  useEffect(() => {
+    if (!coupleId) return;
+
+    const channel = supabase
+      .channel('vision-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'vision_items', filter: `couple_id=eq.${coupleId}` },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setItems((prev) => {
+              if (prev.some((i) => i.id === (payload.new as any).id)) return prev;
+              return [mapDbItem(payload.new), ...prev];
+            });
+          } else if (payload.eventType === 'UPDATE') {
+            setItems((prev) =>
+              prev.map((i) => (i.id === (payload.new as any).id ? mapDbItem(payload.new) : i))
+            );
+          } else if (payload.eventType === 'DELETE') {
+            setItems((prev) => prev.filter((i) => i.id !== (payload.old as any).id));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [coupleId]);
+
+  const uploadImage = useCallback(async (file: File): Promise<string | null> => {
+    if (!user) return null;
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${user.id}/${crypto.randomUUID()}.${fileExt}`;
+
+    const { error } = await supabase.storage
+      .from('vision-images')
+      .upload(fileName, file, { cacheControl: '3600', upsert: false });
+
+    if (error) {
+      console.error('Upload error:', error);
+      toast({ title: 'Upload failed', description: error.message, variant: 'destructive' });
+      return null;
+    }
+
+    const { data: urlData } = supabase.storage
+      .from('vision-images')
+      .getPublicUrl(fileName);
+
+    return urlData.publicUrl;
+  }, [user]);
+
   const addItem = useCallback(
     async (type: VisionItemType, content: string, timeframe: Timeframe, imageUrl?: string) => {
       if (!coupleId || !user) {
@@ -70,20 +123,14 @@ export const useVisionBoard = () => {
       });
       if (error) {
         toast({ title: 'Error', description: error.message, variant: 'destructive' });
-      } else {
-        await fetchItems();
       }
     },
-    [coupleId, user, fetchItems]
+    [coupleId, user]
   );
 
   const deleteItem = useCallback(async (id: string) => {
     const { error } = await supabase.from('vision_items').delete().eq('id', id);
-    if (error) {
-      console.error('Error deleting vision item:', error);
-    } else {
-      setItems((prev) => prev.filter((item) => item.id !== id));
-    }
+    if (error) console.error('Error deleting vision item:', error);
   }, []);
 
   const getItemsByTimeframe = useCallback(
@@ -100,5 +147,5 @@ export const useVisionBoard = () => {
     };
   }, [items]);
 
-  return { items, addItem, deleteItem, getItemsByTimeframe, getCounts, loading };
+  return { items, addItem, deleteItem, getItemsByTimeframe, getCounts, uploadImage, loading };
 };
