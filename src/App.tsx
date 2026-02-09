@@ -12,6 +12,7 @@ import DateNightPage from "./pages/DateNightPage";
 import InsightCenterPage from "./pages/InsightCenterPage";
 import PlanPage from "./pages/PlanPage";
 import BudgetPage from "./pages/BudgetPage";
+import LoveLanguagesPage from "./pages/LoveLanguagesPage";
 import VisionBoardPage from "./pages/VisionBoardPage";
 import CalendarPage from "./pages/CalendarPage";
 import AuthPage from "./pages/AuthPage";
@@ -48,6 +49,7 @@ const ProtectedRoutes = () => {
         <Route path="/insights" element={<InsightCenterPage />} />
         <Route path="/plan" element={<PlanPage />} />
         <Route path="/budget" element={<BudgetPage />} />
+        <Route path="/love-languages" element={<LoveLanguagesPage />} />
         <Route path="/vision" element={<VisionBoardPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/partner" element={<PartnerLinkPage />} />

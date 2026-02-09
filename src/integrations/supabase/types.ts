@@ -227,6 +227,51 @@ export type Database = {
           },
         ]
       }
+      love_languages: {
+        Row: {
+          acts_of_service: number
+          couple_id: string
+          created_at: string
+          id: string
+          physical_touch: number
+          primary_language: string
+          quality_time: number
+          receiving_gifts: number
+          secondary_language: string
+          updated_at: string
+          user_id: string
+          words_of_affirmation: number
+        }
+        Insert: {
+          acts_of_service?: number
+          couple_id: string
+          created_at?: string
+          id?: string
+          physical_touch?: number
+          primary_language?: string
+          quality_time?: number
+          receiving_gifts?: number
+          secondary_language?: string
+          updated_at?: string
+          user_id: string
+          words_of_affirmation?: number
+        }
+        Update: {
+          acts_of_service?: number
+          couple_id?: string
+          created_at?: string
+          id?: string
+          physical_touch?: number
+          primary_language?: string
+          quality_time?: number
+          receiving_gifts?: number
+          secondary_language?: string
+          updated_at?: string
+          user_id?: string
+          words_of_affirmation?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           couple_id: string | null
