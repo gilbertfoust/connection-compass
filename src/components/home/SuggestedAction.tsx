@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowRight, CalendarHeart, DollarSign, Target, Sparkles } from 'lucide-react';
+import { ArrowRight, CalendarHeart, DollarSign, Target, Sparkles, Eye } from 'lucide-react';
 import { activities } from '@/data/activities';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -16,7 +16,6 @@ const useSuggestedAction = (): SuggestedItem => {
   const { coupleId } = useAuth();
   const dayIndex = Math.floor(Date.now() / 86400000);
 
-  // Rotate through a few smart suggestions
   const suggestions: SuggestedItem[] = [
     {
       icon: Sparkles,
@@ -49,6 +48,13 @@ const useSuggestedAction = (): SuggestedItem => {
         text: 'Make progress on a shared goal today',
         path: '/plan',
         color: 'text-chart-4',
+      },
+      {
+        icon: Eye,
+        label: 'Vision Board',
+        text: 'Add to your shared dreams and aspirations',
+        path: '/insight',
+        color: 'text-chart-5',
       }
     );
   }

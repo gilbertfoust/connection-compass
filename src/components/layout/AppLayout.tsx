@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Heart, Home, MessageCircle, ClipboardList, Sprout, LogOut, UserCircle } from 'lucide-react';
+import { Heart, Home, MessageCircle, ClipboardList, Lightbulb, Settings } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import CherryBlossomBackground from './CherryBlossomBackground';
 
@@ -8,7 +8,7 @@ const navItems = [
   { path: '/', icon: Home, label: 'Today' },
   { path: '/engage', icon: MessageCircle, label: 'Engage' },
   { path: '/plan', icon: ClipboardList, label: 'Plan' },
-  { path: '/grow', icon: Sprout, label: 'Grow' },
+  { path: '/insight', icon: Lightbulb, label: 'Insight' },
 ];
 
 interface AppLayoutProps {
@@ -18,7 +18,7 @@ interface AppLayoutProps {
 const AppLayout = ({ children }: AppLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { signOut, profile } = useAuth();
+  const { profile } = useAuth();
   const isMasculine = profile?.gender === 'male';
 
   // Apply gender-adaptive theme class to body
@@ -37,25 +37,19 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/50 px-4 py-3">
-         <div className="max-w-lg mx-auto flex items-center justify-between">
+        <div className="max-w-lg mx-auto flex items-center justify-between">
           <button
-            onClick={() => navigate('/profile')}
+            onClick={() => navigate('/settings')}
             className="p-2 rounded-full hover:bg-accent transition-colors"
-            title="My Profile"
+            title="Settings"
           >
-            <UserCircle className="h-4 w-4 text-muted-foreground" />
+            <Settings className="h-4 w-4 text-muted-foreground" />
           </button>
           <div className="flex items-center gap-2">
             <Heart className="h-5 w-5 text-primary fill-primary" />
             <h1 className="text-lg font-semibold text-foreground tracking-tight">TheMoreLoveApp</h1>
           </div>
-          <button
-            onClick={signOut}
-            className="p-2 rounded-full hover:bg-accent transition-colors"
-            title="Sign out"
-          >
-            <LogOut className="h-4 w-4 text-muted-foreground" />
-          </button>
+          <div className="w-8" />
         </div>
       </header>
 

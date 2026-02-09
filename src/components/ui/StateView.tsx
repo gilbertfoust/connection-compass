@@ -69,7 +69,7 @@ export const PartnerRequiredState = ({ feature, description }: PartnerRequiredSt
             {description || `${feature} requires you to be linked with your partner. Share your invite code or enter theirs to get started.`}
           </p>
         </div>
-        <Button onClick={() => navigate('/partner')} className="rounded-full">
+        <Button onClick={() => navigate('/settings')} className="rounded-full">
           Go to Partner Link
         </Button>
       </CardContent>

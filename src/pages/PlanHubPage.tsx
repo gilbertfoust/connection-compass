@@ -1,11 +1,10 @@
-import { Calendar, DollarSign, ClipboardList, Eye } from 'lucide-react';
+import { Calendar, DollarSign, ClipboardList } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import { PartnerRequiredState } from '@/components/ui/StateView';
 import CalendarPage from './CalendarPage';
 import BudgetPage from './BudgetPage';
 import PlanPage from './PlanPage';
-import VisionBoardPage from './VisionBoardPage';
 
 const PlanHubPage = () => {
   const { coupleId } = useAuth();
@@ -21,7 +20,7 @@ const PlanHubPage = () => {
         </div>
         <PartnerRequiredState
           feature="Planning features"
-          description="Calendar, Budget, Goals, and Vision Board require a partner link. Share your invite code to get started."
+          description="Calendar, Budget, and Goals require a partner link. Share your invite code to get started."
         />
       </div>
     );
@@ -37,23 +36,18 @@ const PlanHubPage = () => {
       </div>
 
       <Tabs defaultValue="calendar" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="calendar" className="gap-1 text-[10px] sm:text-xs px-1">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="calendar" className="gap-1 text-xs">
             <Calendar className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Calendar</span>
-            <span className="sm:hidden">Cal</span>
+            Calendar
           </TabsTrigger>
-          <TabsTrigger value="budget" className="gap-1 text-[10px] sm:text-xs px-1">
+          <TabsTrigger value="budget" className="gap-1 text-xs">
             <DollarSign className="h-3.5 w-3.5" />
             Budget
           </TabsTrigger>
-          <TabsTrigger value="goals" className="gap-1 text-[10px] sm:text-xs px-1">
+          <TabsTrigger value="goals" className="gap-1 text-xs">
             <ClipboardList className="h-3.5 w-3.5" />
             Goals
-          </TabsTrigger>
-          <TabsTrigger value="vision" className="gap-1 text-[10px] sm:text-xs px-1">
-            <Eye className="h-3.5 w-3.5" />
-            Vision
           </TabsTrigger>
         </TabsList>
 
@@ -65,9 +59,6 @@ const PlanHubPage = () => {
         </TabsContent>
         <TabsContent value="goals" className="mt-4">
           <PlanPage />
-        </TabsContent>
-        <TabsContent value="vision" className="mt-4">
-          <VisionBoardPage />
         </TabsContent>
       </Tabs>
     </div>

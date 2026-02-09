@@ -29,7 +29,7 @@ const PartnerBanner = () => {
   return (
     <Card
       className="border-0 shadow-card cursor-pointer hover:shadow-glow transition-all"
-      onClick={() => navigate('/partner')}
+      onClick={() => navigate('/settings')}
     >
       <CardContent className="p-4 space-y-3">
         <div className="flex items-center gap-3">

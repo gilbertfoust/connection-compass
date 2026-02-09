@@ -8,6 +8,7 @@ export const useGoals = () => {
   const { coupleId, user } = useAuth();
   const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const mapDbGoal = (g: any): Goal => ({
     id: g.id,
@@ -33,8 +34,10 @@ export const useGoals = () => {
 
     if (error) {
       console.error('Error fetching goals:', error);
+      setError(error.message);
     } else {
       setGoals((data || []).map(mapDbGoal));
+      setError(null);
     }
     setLoading(false);
   }, [coupleId]);
@@ -143,5 +146,5 @@ export const useGoals = () => {
     );
   };
 
-  return { goals, addGoal, toggleStep, addReflection, deleteGoal, getProgress, loading };
+  return { goals, addGoal, toggleStep, addReflection, deleteGoal, getProgress, loading, error, refetch: fetchGoals };
 };
