@@ -6,16 +6,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import AppLayout from "@/components/layout/AppLayout";
 import HomePage from "./pages/HomePage";
-import EngagementHub from "./pages/EngagementHub";
-import ActivitiesPage from "./pages/ActivitiesPage";
-import DateNightPage from "./pages/DateNightPage";
-import InsightCenterPage from "./pages/InsightCenterPage";
-import PlanPage from "./pages/PlanPage";
-import BudgetPage from "./pages/BudgetPage";
-import LoveLanguagesPage from "./pages/LoveLanguagesPage";
-import TriggersPage from "./pages/TriggersPage";
-import VisionBoardPage from "./pages/VisionBoardPage";
-import CalendarPage from "./pages/CalendarPage";
+import EngagePage from "./pages/EngagePage";
+import PlanHubPage from "./pages/PlanHubPage";
+import GrowPage from "./pages/GrowPage";
 import AuthPage from "./pages/AuthPage";
 import PartnerLinkPage from "./pages/PartnerLinkPage";
 import NotFound from "./pages/NotFound";
@@ -44,16 +37,9 @@ const ProtectedRoutes = () => {
     <AppLayout>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/engagement" element={<EngagementHub />} />
-        <Route path="/activities" element={<ActivitiesPage />} />
-        <Route path="/date-night" element={<DateNightPage />} />
-        <Route path="/insights" element={<InsightCenterPage />} />
-        <Route path="/plan" element={<PlanPage />} />
-        <Route path="/budget" element={<BudgetPage />} />
-        <Route path="/love-languages" element={<LoveLanguagesPage />} />
-        <Route path="/triggers" element={<TriggersPage />} />
-        <Route path="/vision" element={<VisionBoardPage />} />
-        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/engage" element={<EngagePage />} />
+        <Route path="/plan" element={<PlanHubPage />} />
+        <Route path="/grow" element={<GrowPage />} />
         <Route path="/partner" element={<PartnerLinkPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -1,20 +1,18 @@
 import { ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Heart, Home, MessageCircle, Gamepad2, CalendarHeart, Compass, DollarSign, LogOut, HeartHandshake } from 'lucide-react';
+import { Heart, Home, MessageCircle, ClipboardList, Sprout, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+
+const navItems = [
+  { path: '/', icon: Home, label: 'Today' },
+  { path: '/engage', icon: MessageCircle, label: 'Engage' },
+  { path: '/plan', icon: ClipboardList, label: 'Plan' },
+  { path: '/grow', icon: Sprout, label: 'Grow' },
+];
 
 interface AppLayoutProps {
   children: ReactNode;
 }
-
-const navItems = [
-  { path: '/', icon: Home, label: 'Home' },
-  { path: '/engagement', icon: MessageCircle, label: 'Talk' },
-  { path: '/activities', icon: Gamepad2, label: 'Play' },
-  { path: '/date-night', icon: CalendarHeart, label: 'Date' },
-  { path: '/budget', icon: DollarSign, label: 'Budget' },
-  { path: '/love-languages', icon: HeartHandshake, label: 'Love' },
-];
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   const location = useLocation();

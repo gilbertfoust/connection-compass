@@ -1,8 +1,9 @@
 import { useAuth } from '@/contexts/AuthContext';
+import DailyCheckIn from '@/components/home/DailyCheckIn';
 import QuestionOfTheDay from '@/components/home/QuestionOfTheDay';
+import SuggestedAction from '@/components/home/SuggestedAction';
+import DailyReflection from '@/components/home/DailyReflection';
 import StreakCounter from '@/components/home/StreakCounter';
-import QuickActions from '@/components/home/QuickActions';
-import RecommendedCard from '@/components/home/RecommendedCard';
 import PartnerBanner from '@/components/home/PartnerBanner';
 import heroBg from '@/assets/hero-bg.jpg';
 
@@ -11,13 +12,13 @@ const HomePage = () => {
   const displayName = profile?.display_name || 'there';
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Hero Section */}
       <div className="relative rounded-3xl overflow-hidden -mx-4 -mt-6">
         <img
           src={heroBg}
           alt="Warm romantic background"
-          className="w-full h-40 object-cover"
+          className="w-full h-36 object-cover"
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/20 to-background flex items-end p-5">
@@ -36,14 +37,11 @@ const HomePage = () => {
         <StreakCounter />
       </div>
 
-      {/* Quick Actions */}
-      <QuickActions />
-
-      {/* Question of the Day */}
+      {/* Daily Core Loop */}
+      <DailyCheckIn />
       <QuestionOfTheDay />
-
-      {/* Recommended Activity */}
-      <RecommendedCard />
+      <SuggestedAction />
+      <DailyReflection />
     </div>
   );
 };

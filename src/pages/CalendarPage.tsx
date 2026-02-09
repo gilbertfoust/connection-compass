@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCalendarEvents } from '@/hooks/useCalendarEvents';
+import { LoadingState } from '@/components/ui/StateView';
 import AddEventForm from '@/components/calendar/AddEventForm';
 import EventCard from '@/components/calendar/EventCard';
 import CalendarCategoryFilter from '@/components/calendar/CalendarCategoryFilter';
@@ -22,35 +23,27 @@ const CalendarPage = () => {
     getEventsForDate,
     getUpcomingEvents,
     getDatesWithEvents,
+    loading,
   } = useCalendarEvents();
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [showAddForm, setShowAddForm] = useState(false);
   const [view, setView] = useState<'calendar' | 'list'>('calendar');
 
+  if (loading) return <LoadingState message="Loading calendar..." />;
+
   const selectedDateStr = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '';
-  const dayEvents = useMemo(() => getEventsForDate(selectedDateStr), [getEventsForDate, selectedDateStr]);
-  const upcomingEvents = useMemo(() => getUpcomingEvents(5), [getUpcomingEvents]);
-  const datesWithEvents = useMemo(() => getDatesWithEvents(), [getDatesWithEvents]);
+  const dayEvents = getEventsForDate(selectedDateStr);
+  const upcomingEvents = getUpcomingEvents(5);
+  const datesWithEvents = getDatesWithEvents();
 
-  // Create modifiers for the calendar to show dots on event dates
-  const eventDates = useMemo(() => {
-    return Array.from(datesWithEvents.keys()).map((d) => parseISO(d));
-  }, [datesWithEvents]);
+  const eventDates = Array.from(datesWithEvents.keys()).map((d) => parseISO(d));
 
-  const sortedEvents = useMemo(() => {
-    return [...events].sort((a, b) => a.date.localeCompare(b.date));
-  }, [events]);
+  const sortedEvents = [...events].sort((a, b) => a.date.localeCompare(b.date));
 
   return (
-    <div className="space-y-5 animate-fade-in-up">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold text-foreground">Shared Calendar</h2>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            Plan your relationship rhythms together
-          </p>
-        </div>
+    <div className="space-y-4">
+      <div className="flex items-center justify-end">
         <Button size="sm" onClick={() => setShowAddForm(true)} className="rounded-full">
           <Plus className="h-4 w-4 mr-1" /> Add
         </Button>
@@ -86,7 +79,6 @@ const CalendarPage = () => {
 
       {view === 'calendar' ? (
         <>
-          {/* Calendar Widget */}
           <div className="bg-card rounded-2xl p-3 shadow-card">
             <Calendar
               mode="single"
@@ -98,7 +90,6 @@ const CalendarPage = () => {
             />
           </div>
 
-          {/* Selected Date Events */}
           {selectedDate && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -137,12 +128,10 @@ const CalendarPage = () => {
             </div>
           )}
 
-          {/* Upcoming */}
           <UpcomingEvents events={upcomingEvents} />
         </>
       ) : (
         <>
-          {/* List View */}
           <CalendarCategoryFilter
             activeFilter={selectedCategory}
             onFilterChange={(f) => setSelectedCategory(f as EventCategory | 'all')}

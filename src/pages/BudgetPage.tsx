@@ -1,6 +1,7 @@
-import { DollarSign, BarChart3, History, Users } from 'lucide-react';
+import { BarChart3, History } from 'lucide-react';
 import { useBudget } from '@/hooks/useBudget';
 import { useBudgetHistory } from '@/hooks/useBudgetHistory';
+import { LoadingState, PartnerRequiredState } from '@/components/ui/StateView';
 import BudgetSetup from '@/components/budget/BudgetSetup';
 import BudgetDashboard from '@/components/budget/BudgetDashboard';
 import MonthSelector from '@/components/budget/MonthSelector';
@@ -8,9 +9,6 @@ import BudgetTrendChart from '@/components/budget/BudgetTrendChart';
 import BudgetSpendingBreakdown from '@/components/budget/BudgetSpendingBreakdown';
 import BudgetHistoryList from '@/components/budget/BudgetHistoryList';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
 
 const BudgetPage = () => {
   const {
@@ -22,59 +20,15 @@ const BudgetPage = () => {
   } = useBudget();
 
   const { snapshots, loading: historyLoading } = useBudgetHistory();
-  const navigate = useNavigate();
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
+  if (loading) return <LoadingState message="Loading budget..." />;
 
   if (!hasCoupleId) {
-    return (
-      <div className="space-y-5">
-        <div>
-          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <DollarSign className="h-5 w-5 text-primary" />
-            Couple Budget
-          </h2>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            Track spending, set goals, and build financial harmony together
-          </p>
-        </div>
-        <Card>
-          <CardContent className="p-6 text-center space-y-4">
-            <Users className="h-10 w-10 text-muted-foreground mx-auto" />
-            <div>
-              <h3 className="font-semibold text-foreground">Link a Partner First</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                The budget feature requires you to be linked with your partner. Share your invite code or enter theirs to get started.
-              </p>
-            </div>
-            <Button onClick={() => navigate('/partner')}>
-              Go to Partner Link
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return <PartnerRequiredState feature="Couple Budget" />;
   }
 
   return (
-    <div className="space-y-5">
-      {/* Header */}
-      <div>
-        <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-primary" />
-          Couple Budget
-        </h2>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          Track spending, set goals, and build financial harmony together
-        </p>
-      </div>
-
+    <div className="space-y-4">
       <Tabs defaultValue="current" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="current" className="text-xs gap-1.5">
@@ -127,9 +81,7 @@ const BudgetPage = () => {
 
         <TabsContent value="history" className="mt-4 space-y-4">
           {historyLoading ? (
-            <div className="flex items-center justify-center py-10">
-              <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-            </div>
+            <LoadingState message="Loading history..." />
           ) : (
             <>
               <BudgetTrendChart snapshots={snapshots} />
