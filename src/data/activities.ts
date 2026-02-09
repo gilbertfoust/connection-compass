@@ -6,6 +6,7 @@ export interface Activity {
   emoji: string;
   category: string;
   instructions: string[];
+  bonusQuestions?: string[];
 }
 
 export const activities: Activity[] = [
@@ -23,6 +24,11 @@ export const activities: Activity[] = [
       'Share for 2 minutes each without interruption',
       'End with a hug or hand squeeze',
     ],
+    bonusQuestions: [
+      'How are you feeling right now — honestly?',
+      'What emotion have you felt most today?',
+      'What\'s the weather like in your emotional world right now?',
+    ],
   },
   {
     id: 'appreciation-exercise',
@@ -39,6 +45,11 @@ export const activities: Activity[] = [
       'Switch roles',
       'End by sharing how it felt to hear those words',
     ],
+    bonusQuestions: [
+      'What quality in me do you admire the most?',
+      'What small thing do I do that means more than I realize?',
+      'What sacrifice have I made that you\'ve never properly thanked me for?',
+    ],
   },
   {
     id: 'story-swap',
@@ -53,6 +64,11 @@ export const activities: Activity[] = [
       'Your partner asks follow-up questions',
       'Discuss: "How did this shape who you are today?"',
       'Switch and let your partner share their story',
+    ],
+    bonusQuestions: [
+      'What part of your life do you feel I don\'t know enough about?',
+      'What childhood memory you haven\'t told me about?',
+      'How have your priorities changed since we first met?',
     ],
   },
   {
@@ -69,6 +85,11 @@ export const activities: Activity[] = [
       'Your partner asks: "What made it feel that way?"',
       'Discuss what would make tomorrow\'s metaphor better',
     ],
+    bonusQuestions: [
+      'If today had a title, what would it be?',
+      'What emotion is hardest for you to name when you feel it?',
+      'What helps you process difficult emotions — space, talk, or movement?',
+    ],
   },
   {
     id: 'two-truths',
@@ -83,6 +104,11 @@ export const activities: Activity[] = [
       'One should be something you wish had happened',
       'Your partner guesses which one is the wish',
       'Discuss: Can you make that wish come true this week?',
+    ],
+    bonusQuestions: [
+      'What\'s the best impulse decision we ever made together?',
+      'What was the best part of your day?',
+      'What\'s one win you had today, no matter how small?',
     ],
   },
   {
@@ -99,6 +125,11 @@ export const activities: Activity[] = [
       'Ask: "What would help right now?"',
       'Agree on one small action and thank each other',
     ],
+    bonusQuestions: [
+      'What does a genuine apology look like to you?',
+      'What repair gesture from me means the most after a fight?',
+      'What\'s the most important thing I can say to you during a disagreement?',
+    ],
   },
   {
     id: 'connection-quiz',
@@ -113,6 +144,11 @@ export const activities: Activity[] = [
       '"What do I dream about most?" / "What stresses me out?"',
       'Score a point for each correct answer',
       'The "winner" gets to choose the next date night activity!',
+    ],
+    bonusQuestions: [
+      'What\'s my most adorable habit that I probably don\'t know about?',
+      'What do you think I dream about at night?',
+      'What\'s the most random thing that reminds you of me?',
     ],
   },
   {
@@ -129,6 +165,92 @@ export const activities: Activity[] = [
       'Save them in a "digital gratitude jar"',
       'Re-read old ones when you need a boost',
     ],
+    bonusQuestions: [
+      'What are you most grateful for about us right now, in this moment?',
+      'What moment this year are you most grateful we shared?',
+      'What do you appreciate about how we grow together?',
+    ],
+  },
+  {
+    id: 'love-language-discovery',
+    title: 'Love Language Discovery',
+    description: 'Explore how you each give and receive love differently.',
+    duration: '15 min',
+    emoji: '💌',
+    category: 'Connection',
+    instructions: [
+      'Each partner ranks: words, touch, gifts, time, acts of service',
+      'Share your top 2 with your partner',
+      'Give a specific example of when your #1 was fulfilled',
+      'Ask your partner: "What can I do this week to speak your language?"',
+      'Commit to one action each',
+    ],
+    bonusQuestions: [
+      'What makes you feel most loved — words, touch, gifts, time, or help?',
+      'What makes you feel unloved — what\'s your "anti-love language"?',
+      'How can we blend our different love languages better?',
+    ],
+  },
+  {
+    id: 'trust-fall-talk',
+    title: 'Trust Fall Talk',
+    description: 'Share something you\'ve been holding back — in a safe, structured way.',
+    duration: '15 min',
+    emoji: '🤝',
+    category: 'Trust',
+    instructions: [
+      'Set ground rules: no judgment, no interrupting, full presence',
+      'Partner A shares something they\'ve been holding back',
+      'Partner B reflects back: "What I hear is..."',
+      'Partner B responds with empathy, not solutions',
+      'Switch roles if both are comfortable',
+      'End by sharing what this moment meant to you',
+    ],
+    bonusQuestions: [
+      'What vulnerability are you most afraid to show me?',
+      'What makes you feel safe enough to be completely open with me?',
+      'What would it take for you to feel 100% safe with me?',
+    ],
+  },
+  {
+    id: 'future-visioning',
+    title: 'Future Visioning',
+    description: 'Spend 10 minutes dreaming about your life together in 5 years.',
+    duration: '10 min',
+    emoji: '🔮',
+    category: 'Dreams',
+    instructions: [
+      'Close your eyes and imagine your life 5 years from now',
+      'Take turns describing what you see: home, work, lifestyle',
+      'Find 3 overlapping dreams you both share',
+      'Discuss: "What\'s one step we can take this month toward that vision?"',
+      'Write down your shared vision as a couple statement',
+    ],
+    bonusQuestions: [
+      'Where do you see us living in 5 years?',
+      'What does your ideal life look like in 5 years?',
+      'What legacy do you want us to create together?',
+    ],
+  },
+  {
+    id: 'emotional-weather',
+    title: 'Emotional Weather Report',
+    description: 'Describe your inner world using weather as a metaphor.',
+    duration: '5 min',
+    emoji: '🌤️',
+    category: 'Daily Reflection',
+    instructions: [
+      'Each partner describes their emotional state as weather',
+      'Example: "I\'m partly cloudy with a chance of sunshine"',
+      'Explain what\'s creating that weather pattern',
+      'Ask: "What would bring more sunshine?"',
+      'Check in again at the end of the day',
+    ],
+    bonusQuestions: [
+      'What\'s the weather like in your emotional world right now?',
+      'How are you feeling about "us" today?',
+      'Rate your stress level — and what could lower it by one point?',
+    ],
   },
 ];
 
@@ -143,6 +265,11 @@ export const dateNightIdeas = [
     setting: 'outdoor',
     energy: 'low',
     mood: 'romantic',
+    conversationPrompts: [
+      'What part of our daily life together brings you the most joy?',
+      'What does being "home" in a person feel like to you?',
+      'What silent promise do you feel we\'ve made to each other?',
+    ],
   },
   {
     id: 'dn2',
@@ -154,6 +281,11 @@ export const dateNightIdeas = [
     setting: 'indoor',
     energy: 'high',
     mood: 'playful',
+    conversationPrompts: [
+      'What superpower would benefit our relationship the most?',
+      'If we opened a business together, what would it be?',
+      'What board game or sport would we dominate as a team?',
+    ],
   },
   {
     id: 'dn3',
@@ -165,6 +297,11 @@ export const dateNightIdeas = [
     setting: 'outdoor',
     energy: 'medium',
     mood: 'reflective',
+    conversationPrompts: [
+      'If we could relive one moment together, which would you choose?',
+      'What moment made you realize you were in love with me?',
+      'What are you most proud of in how we\'ve loved each other?',
+    ],
   },
   {
     id: 'dn4',
@@ -176,6 +313,11 @@ export const dateNightIdeas = [
     setting: 'indoor',
     energy: 'low',
     mood: 'romantic',
+    conversationPrompts: [
+      'What kind of touch makes you feel most connected to me?',
+      'What non-sexual touch makes you feel most loved?',
+      'What does sensuality versus sexuality mean to you?',
+    ],
   },
   {
     id: 'dn5',
@@ -187,6 +329,11 @@ export const dateNightIdeas = [
     setting: 'outdoor',
     energy: 'high',
     mood: 'adventurous',
+    conversationPrompts: [
+      'What\'s the most spontaneous thing we\'ve ever done together?',
+      'What adventure have you been secretly craving?',
+      'What "first" do we still have left to experience together?',
+    ],
   },
   {
     id: 'dn6',
@@ -198,5 +345,42 @@ export const dateNightIdeas = [
     setting: 'indoor',
     energy: 'low',
     mood: 'playful',
+    conversationPrompts: [
+      'What fictional couple reminds you most of us?',
+      'What movie scene do you want to recreate with me?',
+      'If our love story were a headline, what would it say?',
+    ],
+  },
+  {
+    id: 'dn7',
+    title: 'Dream Board Date',
+    description: 'Spend the evening creating a shared vision board for your relationship\'s future.',
+    instructions: ['Gather magazines, printed images, or use digital tools', 'Each pick 5 images that represent your shared dream', 'Arrange them together on a board or poster', 'Discuss what each image represents', 'Display it somewhere you\'ll see it daily'],
+    whyItFits: 'Aligning your dreams visually strengthens your shared sense of purpose.',
+    budget: 'low',
+    setting: 'indoor',
+    energy: 'medium',
+    mood: 'reflective',
+    conversationPrompts: [
+      'What does your ideal life look like in 5 years?',
+      'What legacy do you want us to create together?',
+      'If we could design our life from scratch, what stays and what goes?',
+    ],
+  },
+  {
+    id: 'dn8',
+    title: 'Sunset Gratitude Walk',
+    description: 'Take a slow walk during golden hour, sharing one gratitude per block.',
+    instructions: ['Head out around sunset time', 'Walk slowly — no rushing', 'Every block or 2 minutes, share one thing you\'re grateful for', 'Alternate between gratitude for each other and for life', 'End at a café or bench for one final share'],
+    whyItFits: 'Movement plus gratitude is a powerful combination for emotional connection.',
+    budget: 'free',
+    setting: 'outdoor',
+    energy: 'low',
+    mood: 'romantic',
+    conversationPrompts: [
+      'When do you feel most grateful for our relationship?',
+      'What brings you the deepest sense of belonging in our relationship?',
+      'What three words describe what you\'re most grateful for in us?',
+    ],
   },
 ];

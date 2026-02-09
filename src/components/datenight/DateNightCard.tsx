@@ -12,6 +12,7 @@ interface DateNightIdea {
   setting: string;
   energy: string;
   mood: string;
+  conversationPrompts?: string[];
 }
 
 interface DateNightCardProps {
@@ -94,6 +95,19 @@ const DateNightCard = ({ idea, index }: DateNightCardProps) => {
               </div>
               <p className="text-xs text-accent-foreground/80">{idea.whyItFits}</p>
             </div>
+
+            {idea.conversationPrompts && idea.conversationPrompts.length > 0 && (
+              <div className="bg-primary/5 rounded-xl p-3">
+                <h4 className="text-[10px] font-semibold text-primary uppercase tracking-wider mb-2">
+                  💬 Questions to Ask During This Date
+                </h4>
+                <ul className="space-y-1.5">
+                  {idea.conversationPrompts.map((q, i) => (
+                    <li key={i} className="text-xs text-foreground/70 italic">"{q}"</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
       </CardContent>

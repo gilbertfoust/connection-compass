@@ -16,6 +16,11 @@ export interface AnalysisResult {
     context: string;
   }[];
   reflectionPrompts: string[];
+  suggestedTools?: {
+    tool: string;
+    reason: string;
+    emoji: string;
+  }[];
   moodInsight: string;
   focusArea: string;
 }

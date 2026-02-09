@@ -1,4 +1,5 @@
-import { ArrowLeft, Sparkles, MessageCircle, BookOpen, Heart, Tag } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Sparkles, MessageCircle, BookOpen, Heart, Tag, Wrench } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,7 +18,17 @@ const focusAreaLabels: Record<string, string> = {
   healing: '🌱 Healing',
 };
 
+const toolRoutes: Record<string, string> = {
+  'Conversation Decks': '/engagement',
+  'Goal Tracker': '/plan',
+  'To-Do List': '/plan',
+  'Date Night Generator': '/date-night',
+  'Activities & Games': '/activities',
+};
+
 const InsightResults = ({ result, onReset }: InsightResultsProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="space-y-4 animate-fade-in-up">
       {/* Back button */}
@@ -103,6 +114,39 @@ const InsightResults = ({ result, onReset }: InsightResultsProps) => {
           ))}
         </div>
       </div>
+
+      {/* Suggested Tools */}
+      {result.suggestedTools && result.suggestedTools.length > 0 && (
+        <div>
+          <div className="flex items-center gap-2 mb-3 px-1">
+            <Wrench className="h-4 w-4 text-primary" />
+            <h3 className="text-sm font-semibold text-foreground">Tools for You Two</h3>
+          </div>
+          <div className="space-y-2">
+            {result.suggestedTools.map((tool, i) => (
+              <Card
+                key={i}
+                className="border-0 shadow-card cursor-pointer hover:shadow-glow transition-all duration-300"
+                onClick={() => {
+                  const route = toolRoutes[tool.tool];
+                  if (route) navigate(route);
+                }}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <span className="text-xl">{tool.emoji}</span>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-sm text-card-foreground">{tool.tool}</h4>
+                      <p className="text-xs text-muted-foreground mt-0.5">{tool.reason}</p>
+                      <span className="text-[10px] text-primary mt-1.5 inline-block">Tap to open →</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Reflection Prompts */}
       <div>
