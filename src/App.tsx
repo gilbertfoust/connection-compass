@@ -15,6 +15,11 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Decide basename at runtime so Lovable works at root
+// and GitHub Pages works under /connection-compass
+const basename =
+  typeof window !== "undefined" && window.location.hostname === "gilbertfoust.github.io" ? "/connection-compass" : "";
+
 const ProtectedRoutes = () => {
   const { user, loading } = useAuth();
 
@@ -75,7 +80,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <AuthProvider>
           <AppRoutes />
         </AuthProvider>
