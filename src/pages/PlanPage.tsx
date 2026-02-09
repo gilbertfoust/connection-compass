@@ -5,16 +5,7 @@ import GoalSection from '@/components/plan/GoalSection';
 
 const PlanPage = () => {
   return (
-    <div className="space-y-5">
-      {/* Header */}
-      <div>
-        <h2 className="text-xl font-bold text-foreground">Plan Together</h2>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          Track tasks, set goals, and grow as a team
-        </p>
-      </div>
-
-      {/* Tabs */}
+    <div className="space-y-4">
       <Tabs defaultValue="todos" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="todos" className="gap-1.5 text-xs">

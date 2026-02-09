@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { dateNightIdeas } from '@/data/activities';
 import DateNightCard from '@/components/datenight/DateNightCard';
-import { Sparkles } from 'lucide-react';
 
 const budgetOptions = ['All', 'free', 'low', 'medium'] as const;
 const settingOptions = ['All', 'indoor', 'outdoor'] as const;
@@ -53,17 +52,7 @@ const DateNightPage = () => {
   );
 
   return (
-    <div className="space-y-5">
-      <div>
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-bold text-foreground">Date Night Generator</h2>
-        </div>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          Find the perfect date for your mood
-        </p>
-      </div>
-
+    <div className="space-y-4">
       {/* Filters */}
       <div className="space-y-3 bg-card rounded-2xl p-4 shadow-card">
         <FilterRow label="Budget" options={budgetOptions} active={budgetFilter} onChange={setBudgetFilter} />
