@@ -10,6 +10,11 @@ interface UserLocation {
   city?: string;
 }
 
+/**
+ * useDateNightAI — Calls the 'suggest-dates' edge function.
+ * Optionally uses browser geolocation for local venue suggestions.
+ * Requires LOVABLE_API_KEY in Supabase secrets.
+ */
 export const useDateNightAI = () => {
   const { coupleId } = useAuth();
   const { toast } = useToast();

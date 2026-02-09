@@ -13,6 +13,10 @@ const ACCENT_COLORS = [
   'bg-chart-5/10 border-chart-5/30',
 ];
 
+/**
+ * useVisionBoard — Shared couple vision board items with image uploads.
+ * Scoped by couple_id with realtime sync. Images stored in 'vision-images' bucket.
+ */
 export const useVisionBoard = () => {
   const { coupleId, user } = useAuth();
   const [items, setItems] = useState<VisionItem[]>([]);

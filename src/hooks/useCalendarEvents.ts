@@ -4,6 +4,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import type { CalendarEvent, EventCategory } from '@/types/calendar';
 import { toast } from '@/hooks/use-toast';
 
+/**
+ * useCalendarEvents — Shared couple calendar.
+ * Scoped by couple_id with realtime sync. Channel cleanup on unmount.
+ */
 export const useCalendarEvents = () => {
   const { coupleId, user } = useAuth();
   const [events, setEvents] = useState<CalendarEvent[]>([]);

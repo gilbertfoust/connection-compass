@@ -4,6 +4,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import type { TriggerProfile, TriggerInsights } from '@/types/triggers';
 
+/**
+ * useTriggerProfiles — Per-user trigger profiles, visible to partner via RLS.
+ * analyzeInsights() calls the 'analyze-triggers' edge function which uses
+ * LOVABLE_API_KEY to get AI insights on how both partners' triggers interact.
+ */
 export const useTriggerProfiles = () => {
   const { user, coupleId } = useAuth();
   const [myProfile, setMyProfile] = useState<TriggerProfile | null>(null);

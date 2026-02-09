@@ -4,6 +4,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import type { Todo, TodoCategory } from '@/types/plan';
 import { toast } from '@/hooks/use-toast';
 
+/**
+ * useTodos — Shared couple to-do list.
+ * All queries are scoped by couple_id (enforced by RLS via get_user_couple_id).
+ * Realtime subscription listens for INSERT/UPDATE/DELETE on the todos table
+ * filtered by couple_id, and cleans up the channel on unmount.
+ */
 export const useTodos = () => {
   const { coupleId, user } = useAuth();
   const [todos, setTodos] = useState<Todo[]>([]);

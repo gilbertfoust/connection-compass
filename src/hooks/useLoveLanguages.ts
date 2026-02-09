@@ -4,6 +4,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import type { LoveLanguageResult, LoveLanguageKey } from '@/data/loveLanguages';
 
+/**
+ * useLoveLanguages — Per-user quiz results, visible to partner via RLS.
+ * Fetches all visible results (own + partner) and splits them by user_id.
+ * Realtime subscription on couple_id for partner updates.
+ */
 export const useLoveLanguages = () => {
   const { user, coupleId } = useAuth();
   const [myResult, setMyResult] = useState<LoveLanguageResult | null>(null);

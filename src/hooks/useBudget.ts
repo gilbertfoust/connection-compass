@@ -5,6 +5,11 @@ import { toast } from '@/hooks/use-toast';
 import type { Budget, BudgetItem, BudgetTemplate } from '@/types/budget';
 import { BUDGET_TEMPLATES } from '@/types/budget';
 
+/**
+ * useBudget — Shared couple budget management.
+ * Scoped by couple_id with realtime sync on both budgets and budget_items.
+ * Supports template-based budget creation with seeded categories.
+ */
 export const useBudget = () => {
   const { coupleId, user } = useAuth();
   const [budgets, setBudgets] = useState<Budget[]>([]);

@@ -4,6 +4,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import type { Goal, GoalCategory, GoalStep, GoalReflection } from '@/types/plan';
 import { toast } from '@/hooks/use-toast';
 
+/**
+ * useGoals — Shared couple goals with JSONB milestones and reflections.
+ * Scoped by couple_id with realtime sync. Channel cleanup on unmount.
+ */
 export const useGoals = () => {
   const { coupleId, user } = useAuth();
   const [goals, setGoals] = useState<Goal[]>([]);
