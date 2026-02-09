@@ -43,20 +43,35 @@ const ActivityCard = ({ activity, index }: ActivityCardProps) => {
         </div>
 
         {isExpanded && (
-          <div className="mt-4 pt-4 border-t border-border/50 animate-fade-in-up">
-            <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-2">
-              How to Play
-            </h4>
-            <ol className="space-y-2">
-              {activity.instructions.map((step, i) => (
-                <li key={i} className="flex gap-2 text-xs text-muted-foreground">
-                  <span className="shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center">
-                    {i + 1}
-                  </span>
-                  {step}
-                </li>
-              ))}
-            </ol>
+          <div className="mt-4 pt-4 border-t border-border/50 animate-fade-in-up space-y-4">
+            <div>
+              <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-2">
+                How to Play
+              </h4>
+              <ol className="space-y-2">
+                {activity.instructions.map((step, i) => (
+                  <li key={i} className="flex gap-2 text-xs text-muted-foreground">
+                    <span className="shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center">
+                      {i + 1}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {activity.bonusQuestions && activity.bonusQuestions.length > 0 && (
+              <div className="bg-accent rounded-xl p-3">
+                <h4 className="text-[10px] font-semibold text-accent-foreground uppercase tracking-wider mb-2">
+                  💬 Bonus Questions to Ask
+                </h4>
+                <ul className="space-y-1.5">
+                  {activity.bonusQuestions.map((q, i) => (
+                    <li key={i} className="text-xs text-accent-foreground/80 italic">"{q}"</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
       </CardContent>

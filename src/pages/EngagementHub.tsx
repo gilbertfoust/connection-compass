@@ -25,6 +25,10 @@ const EngagementHub = () => {
         <p className="text-sm text-muted-foreground mt-0.5">
           Choose a deck and explore questions together
         </p>
+        <div className="mt-2 inline-flex items-center gap-1.5 bg-primary/10 text-primary rounded-full px-3 py-1">
+          <span className="text-xs font-semibold">{conversationDecks.reduce((s, d) => s + d.cards.length, 0)}+ questions</span>
+          <span className="text-xs">across {conversationDecks.length} decks</span>
+        </div>
       </div>
 
       <FilterBar activeFilter={activeFilter} onFilterChange={setActiveFilter} />
