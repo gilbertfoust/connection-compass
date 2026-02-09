@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { Eye, Sparkles } from 'lucide-react';
 import { useVisionBoard } from '@/hooks/useVisionBoard';
+import { useVisionBoardAI } from '@/hooks/useVisionBoardAI';
 import { TIMEFRAMES, type Timeframe } from '@/types/vision';
 import TimeframeSelector from '@/components/vision/TimeframeSelector';
 import VisionBoardGrid from '@/components/vision/VisionBoardGrid';
 import AddVisionItemForm from '@/components/vision/AddVisionItemForm';
 import StarterPrompts from '@/components/vision/StarterPrompts';
+import GeneratedVisionBoard from '@/components/vision/GeneratedVisionBoard';
 import { Badge } from '@/components/ui/badge';
 
 const VisionBoardPage = () => {
   const { items, addItem, deleteItem, getItemsByTimeframe, getCounts, uploadImage } = useVisionBoard();
+  const { isGenerating, generatedBoard, generateBoard, clearBoard } = useVisionBoardAI();
   const [activeTimeframe, setActiveTimeframe] = useState<Timeframe>('1-year');
   const counts = getCounts();
 
@@ -36,6 +39,15 @@ const VisionBoardPage = () => {
           </Badge>
         )}
       </div>
+
+      {/* AI Generated Board */}
+      <GeneratedVisionBoard
+        isGenerating={isGenerating}
+        generatedBoard={generatedBoard}
+        onGenerate={generateBoard}
+        onClear={clearBoard}
+        hasItems={counts.total > 0}
+      />
 
       {/* Timeframe tabs */}
       <TimeframeSelector
