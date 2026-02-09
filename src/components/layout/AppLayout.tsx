@@ -47,7 +47,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           </button>
           <div className="flex items-center gap-2">
             <Heart className="h-5 w-5 text-primary fill-primary" />
-            <h1 className="text-lg font-semibold text-foreground tracking-tight">TheMoreLoveApp</h1>
+            <h1 className="text-lg font-semibold text-foreground tracking-tight">TheLoveMoreApp</h1>
           </div>
           <div className="w-8" />
         </div>

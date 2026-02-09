@@ -47,7 +47,7 @@ serve(async (req) => {
       .map(([tf, items]) => `${tf}: ${items.map((i: any) => `[${i.type}] ${i.content}`).join(", ")}`)
       .join("\n");
 
-    const systemPrompt = `You are a creative vision board designer for TheMoreLoveApp, a couples relationship app. Given a couple's vision board items, create a beautiful, inspiring text description that would work as a prompt for generating a cohesive vision board image.
+    const systemPrompt = `You are a creative vision board designer for TheLoveMoreApp, a couples relationship app. Given a couple's vision board items, create a beautiful, inspiring text description that would work as a prompt for generating a cohesive vision board image.
 
 The couple has added these items to their vision board:
 ${itemsSummary}

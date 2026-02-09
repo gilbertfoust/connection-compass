@@ -67,7 +67,7 @@ const AuthPage = () => {
           <div className="flex items-center justify-center gap-2">
             <Heart className="h-8 w-8 text-primary fill-primary" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground">TheMoreLoveApp</h1>
+          <h1 className="text-2xl font-bold text-foreground">TheLoveMoreApp</h1>
           <p className="text-sm text-muted-foreground">
             {isSignUp ? 'Create your account to start growing together' : 'Welcome back, let\'s grow closer today'}
           </p>

@@ -24,7 +24,7 @@ serve(async (req) => {
       ? `Their preferences: budget=${filters.budget || "any"}, setting=${filters.setting || "any"}, energy=${filters.energy || "any"}.`
       : "";
 
-    const systemPrompt = `You are the Date Night Generator in TheMoreLoveApp, a couples relationship app. Generate 5 creative, personalized date night suggestions.
+    const systemPrompt = `You are the Date Night Generator in TheLoveMoreApp, a couples relationship app. Generate 5 creative, personalized date night suggestions.
 
 ${locationContext}
 ${filterContext}
