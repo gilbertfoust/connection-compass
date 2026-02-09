@@ -23,6 +23,12 @@ export interface PersonalProfile {
   updated_at: string;
 }
 
+/**
+ * usePersonalProfile — Private per-user profile data (not shared with partner).
+ * Stores questionnaire answers (interests, values, communication style, etc.).
+ * RLS ensures only the owner can read/write. Future: AI functions will query
+ * this data server-side to personalize suggestions.
+ */
 export const usePersonalProfile = () => {
   const { user, coupleId } = useAuth();
   const [profile, setProfile] = useState<PersonalProfile | null>(null);

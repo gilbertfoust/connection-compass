@@ -25,6 +25,12 @@ export interface AnalysisResult {
   focusArea: string;
 }
 
+/**
+ * useConversationAnalysis — Calls the 'analyze-conversation' edge function.
+ * Sends free-text conversation input, receives structured AI analysis with
+ * themes, suggested activities, conversation starters, and tool recommendations.
+ * Requires LOVABLE_API_KEY to be set in Supabase secrets.
+ */
 export const useConversationAnalysis = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);

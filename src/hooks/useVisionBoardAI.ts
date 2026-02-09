@@ -10,6 +10,12 @@ interface GeneratedBoard {
   imagePrompt: string;
 }
 
+/**
+ * useVisionBoardAI — Calls the 'generate-vision-board' edge function.
+ * Reads the couple's vision items server-side (via SUPABASE_SERVICE_ROLE_KEY),
+ * generates an AI summary + image, and uploads the image to 'vision-images' bucket.
+ * Requires LOVABLE_API_KEY and SUPABASE_SERVICE_ROLE_KEY in Supabase secrets.
+ */
 export const useVisionBoardAI = () => {
   const { coupleId } = useAuth();
   const { toast } = useToast();

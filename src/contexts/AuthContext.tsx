@@ -28,6 +28,13 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/**
+ * AuthProvider manages user session, profile, and couple linkage.
+ * - coupleId is derived from the user's profile row and used throughout
+ *   the app to scope all shared data queries.
+ * - linkPartner() calls the `link_partner` RPC which creates a couples row
+ *   and sets couple_id on both partner profiles.
+ */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
