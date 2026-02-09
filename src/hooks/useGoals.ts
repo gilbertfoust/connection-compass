@@ -1,63 +1,127 @@
-import { useCallback } from 'react';
-import { useLocalStorage } from './useLocalStorage';
+import { useState, useCallback, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import type { Goal, GoalCategory, GoalStep, GoalReflection } from '@/types/plan';
+import { toast } from '@/hooks/use-toast';
 
 export const useGoals = () => {
-  const [goals, setGoals] = useLocalStorage<Goal[]>('tmla-goals', []);
+  const { coupleId, user } = useAuth();
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const mapDbGoal = (g: any): Goal => ({
+    id: g.id,
+    title: g.title,
+    description: g.category, // we store category as the description field equivalent
+    category: g.category as GoalCategory,
+    steps: Array.isArray(g.milestones) ? g.milestones : [],
+    reflections: Array.isArray(g.reflections) ? g.reflections : [],
+    createdAt: g.created_at,
+  });
+
+  const fetchGoals = useCallback(async () => {
+    if (!coupleId) {
+      setGoals([]);
+      setLoading(false);
+      return;
+    }
+    const { data, error } = await supabase
+      .from('goals')
+      .select('*')
+      .eq('couple_id', coupleId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching goals:', error);
+    } else {
+      setGoals((data || []).map(mapDbGoal));
+    }
+    setLoading(false);
+  }, [coupleId]);
+
+  useEffect(() => {
+    fetchGoals();
+  }, [fetchGoals]);
 
   const addGoal = useCallback(
-    (title: string, description: string, category: GoalCategory, steps: string[]) => {
-      const newGoal: Goal = {
+    async (title: string, description: string, category: GoalCategory, steps: string[]) => {
+      if (!coupleId || !user) {
+        toast({ title: 'Link a partner first', description: 'You need to link with a partner before adding shared items.', variant: 'destructive' });
+        return;
+      }
+      const milestones: GoalStep[] = steps.map((s) => ({
         id: crypto.randomUUID(),
+        text: s,
+        completed: false,
+      }));
+
+      const { error } = await supabase.from('goals').insert({
+        couple_id: coupleId,
         title,
-        description,
         category,
-        steps: steps.map((s) => ({
-          id: crypto.randomUUID(),
-          text: s,
-          completed: false,
-        })),
-        reflections: [],
-        createdAt: new Date().toISOString(),
-      };
-      setGoals((prev) => [newGoal, ...prev]);
+        target_date: null,
+        milestones: milestones as any,
+        reflections: [] as any,
+        created_by: user.id,
+      });
+      if (error) {
+        toast({ title: 'Error', description: error.message, variant: 'destructive' });
+      } else {
+        await fetchGoals();
+      }
     },
-    [setGoals]
+    [coupleId, user, fetchGoals]
   );
 
-  const toggleStep = useCallback((goalId: string, stepId: string) => {
-    setGoals((prev) =>
-      prev.map((g) =>
-        g.id === goalId
-          ? {
-              ...g,
-              steps: g.steps.map((s) =>
-                s.id === stepId ? { ...s, completed: !s.completed } : s
-              ),
-            }
-          : g
-      )
+  const toggleStep = useCallback(async (goalId: string, stepId: string) => {
+    const goal = goals.find((g) => g.id === goalId);
+    if (!goal) return;
+    const updatedSteps = goal.steps.map((s) =>
+      s.id === stepId ? { ...s, completed: !s.completed } : s
     );
-  }, [setGoals]);
+    const { error } = await supabase
+      .from('goals')
+      .update({ milestones: updatedSteps as any })
+      .eq('id', goalId);
+    if (error) {
+      console.error('Error toggling step:', error);
+    } else {
+      setGoals((prev) =>
+        prev.map((g) => (g.id === goalId ? { ...g, steps: updatedSteps } : g))
+      );
+    }
+  }, [goals]);
 
-  const addReflection = useCallback((goalId: string, text: string) => {
+  const addReflection = useCallback(async (goalId: string, text: string) => {
+    const goal = goals.find((g) => g.id === goalId);
+    if (!goal) return;
     const reflection: GoalReflection = {
       id: crypto.randomUUID(),
       text,
       date: new Date().toISOString(),
     };
-    setGoals((prev) =>
-      prev.map((g) =>
-        g.id === goalId
-          ? { ...g, reflections: [reflection, ...g.reflections] }
-          : g
-      )
-    );
-  }, [setGoals]);
+    const updatedReflections = [reflection, ...goal.reflections];
+    const { error } = await supabase
+      .from('goals')
+      .update({ reflections: updatedReflections as any })
+      .eq('id', goalId);
+    if (error) {
+      console.error('Error adding reflection:', error);
+    } else {
+      setGoals((prev) =>
+        prev.map((g) => (g.id === goalId ? { ...g, reflections: updatedReflections } : g))
+      );
+    }
+  }, [goals]);
 
-  const deleteGoal = useCallback((id: string) => {
-    setGoals((prev) => prev.filter((g) => g.id !== id));
-  }, [setGoals]);
+  const deleteGoal = useCallback(async (id: string) => {
+    const { error } = await supabase.from('goals').delete().eq('id', id);
+    if (error) {
+      console.error('Error deleting goal:', error);
+    } else {
+      setGoals((prev) => prev.filter((g) => g.id !== id));
+    }
+  }, []);
 
   const getProgress = (goal: Goal) => {
     if (goal.steps.length === 0) return 0;
@@ -66,5 +130,5 @@ export const useGoals = () => {
     );
   };
 
-  return { goals, addGoal, toggleStep, addReflection, deleteGoal, getProgress };
+  return { goals, addGoal, toggleStep, addReflection, deleteGoal, getProgress, loading };
 };

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { MessageCircle, Gamepad2, CalendarHeart, ClipboardList, Compass, Eye, Calendar } from 'lucide-react';
+import { MessageCircle, Gamepad2, CalendarHeart, ClipboardList, Compass, Eye, Calendar, Link2 } from 'lucide-react';
 
 const actions = [
   { icon: MessageCircle, label: 'Talk', path: '/engagement', color: 'bg-primary/10 text-primary' },
@@ -8,6 +8,7 @@ const actions = [
   { icon: Calendar, label: 'Calendar', path: '/calendar', color: 'bg-chart-3/10 text-chart-3' },
   { icon: ClipboardList, label: 'Plan', path: '/plan', color: 'bg-chart-5/10 text-chart-5' },
   { icon: Eye, label: 'Vision', path: '/vision', color: 'bg-chart-4/10 text-chart-4' },
+  { icon: Link2, label: 'Partner', path: '/partner', color: 'bg-accent text-accent-foreground' },
   { icon: Compass, label: 'Insights', path: '/insights', color: 'bg-muted text-muted-foreground' },
 ];
 

@@ -14,13 +14,251 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      calendar_events: {
+        Row: {
+          category: string
+          completed: boolean
+          conversation_prompt: string | null
+          couple_id: string
+          created_at: string
+          created_by: string | null
+          date: string
+          description: string | null
+          id: string
+          recurring: string | null
+          time: string | null
+          title: string
+        }
+        Insert: {
+          category?: string
+          completed?: boolean
+          conversation_prompt?: string | null
+          couple_id: string
+          created_at?: string
+          created_by?: string | null
+          date: string
+          description?: string | null
+          id?: string
+          recurring?: string | null
+          time?: string | null
+          title: string
+        }
+        Update: {
+          category?: string
+          completed?: boolean
+          conversation_prompt?: string | null
+          couple_id?: string
+          created_at?: string
+          created_by?: string | null
+          date?: string
+          description?: string | null
+          id?: string
+          recurring?: string | null
+          time?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_events_couple_id_fkey"
+            columns: ["couple_id"]
+            isOneToOne: false
+            referencedRelation: "couples"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      couples: {
+        Row: {
+          created_at: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      goals: {
+        Row: {
+          category: string
+          completed: boolean
+          couple_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          milestones: Json | null
+          reflections: Json | null
+          target_date: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          completed?: boolean
+          couple_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          milestones?: Json | null
+          reflections?: Json | null
+          target_date?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          completed?: boolean
+          couple_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          milestones?: Json | null
+          reflections?: Json | null
+          target_date?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goals_couple_id_fkey"
+            columns: ["couple_id"]
+            isOneToOne: false
+            referencedRelation: "couples"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          couple_id: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          invite_code: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          couple_id?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          invite_code?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          couple_id?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          invite_code?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_couple_id_fkey"
+            columns: ["couple_id"]
+            isOneToOne: false
+            referencedRelation: "couples"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      todos: {
+        Row: {
+          category: string
+          completed: boolean
+          couple_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          title: string
+        }
+        Insert: {
+          category?: string
+          completed?: boolean
+          couple_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          title: string
+        }
+        Update: {
+          category?: string
+          completed?: boolean
+          couple_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "todos_couple_id_fkey"
+            columns: ["couple_id"]
+            isOneToOne: false
+            referencedRelation: "couples"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vision_items: {
+        Row: {
+          color: string | null
+          content: string
+          couple_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          image_url: string | null
+          timeframe: string
+          type: string
+        }
+        Insert: {
+          color?: string | null
+          content: string
+          couple_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          image_url?: string | null
+          timeframe?: string
+          type: string
+        }
+        Update: {
+          color?: string | null
+          content?: string
+          couple_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          image_url?: string | null
+          timeframe?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vision_items_couple_id_fkey"
+            columns: ["couple_id"]
+            isOneToOne: false
+            referencedRelation: "couples"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_couple_id: { Args: { _user_id: string }; Returns: string }
+      link_partner: { Args: { partner_invite_code: string }; Returns: Json }
     }
     Enums: {
       [_ in never]: never
