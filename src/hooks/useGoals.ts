@@ -12,7 +12,7 @@ export const useGoals = () => {
   const mapDbGoal = (g: any): Goal => ({
     id: g.id,
     title: g.title,
-    description: g.category, // we store category as the description field equivalent
+    description: g.category,
     category: g.category as GoalCategory,
     steps: Array.isArray(g.milestones) ? g.milestones : [],
     reflections: Array.isArray(g.reflections) ? g.reflections : [],
@@ -43,6 +43,37 @@ export const useGoals = () => {
     fetchGoals();
   }, [fetchGoals]);
 
+  // Real-time subscription
+  useEffect(() => {
+    if (!coupleId) return;
+
+    const channel = supabase
+      .channel('goals-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'goals', filter: `couple_id=eq.${coupleId}` },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setGoals((prev) => {
+              if (prev.some((g) => g.id === (payload.new as any).id)) return prev;
+              return [mapDbGoal(payload.new), ...prev];
+            });
+          } else if (payload.eventType === 'UPDATE') {
+            setGoals((prev) =>
+              prev.map((g) => (g.id === (payload.new as any).id ? mapDbGoal(payload.new) : g))
+            );
+          } else if (payload.eventType === 'DELETE') {
+            setGoals((prev) => prev.filter((g) => g.id !== (payload.old as any).id));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [coupleId]);
+
   const addGoal = useCallback(
     async (title: string, description: string, category: GoalCategory, steps: string[]) => {
       if (!coupleId || !user) {
@@ -66,11 +97,9 @@ export const useGoals = () => {
       });
       if (error) {
         toast({ title: 'Error', description: error.message, variant: 'destructive' });
-      } else {
-        await fetchGoals();
       }
     },
-    [coupleId, user, fetchGoals]
+    [coupleId, user]
   );
 
   const toggleStep = useCallback(async (goalId: string, stepId: string) => {
@@ -83,13 +112,7 @@ export const useGoals = () => {
       .from('goals')
       .update({ milestones: updatedSteps as any })
       .eq('id', goalId);
-    if (error) {
-      console.error('Error toggling step:', error);
-    } else {
-      setGoals((prev) =>
-        prev.map((g) => (g.id === goalId ? { ...g, steps: updatedSteps } : g))
-      );
-    }
+    if (error) console.error('Error toggling step:', error);
   }, [goals]);
 
   const addReflection = useCallback(async (goalId: string, text: string) => {
@@ -105,22 +128,12 @@ export const useGoals = () => {
       .from('goals')
       .update({ reflections: updatedReflections as any })
       .eq('id', goalId);
-    if (error) {
-      console.error('Error adding reflection:', error);
-    } else {
-      setGoals((prev) =>
-        prev.map((g) => (g.id === goalId ? { ...g, reflections: updatedReflections } : g))
-      );
-    }
+    if (error) console.error('Error adding reflection:', error);
   }, [goals]);
 
   const deleteGoal = useCallback(async (id: string) => {
     const { error } = await supabase.from('goals').delete().eq('id', id);
-    if (error) {
-      console.error('Error deleting goal:', error);
-    } else {
-      setGoals((prev) => prev.filter((g) => g.id !== id));
-    }
+    if (error) console.error('Error deleting goal:', error);
   }, []);
 
   const getProgress = (goal: Goal) => {

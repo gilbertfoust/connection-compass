@@ -9,7 +9,7 @@ import StarterPrompts from '@/components/vision/StarterPrompts';
 import { Badge } from '@/components/ui/badge';
 
 const VisionBoardPage = () => {
-  const { items, addItem, deleteItem, getItemsByTimeframe, getCounts } = useVisionBoard();
+  const { items, addItem, deleteItem, getItemsByTimeframe, getCounts, uploadImage } = useVisionBoard();
   const [activeTimeframe, setActiveTimeframe] = useState<Timeframe>('1-year');
   const counts = getCounts();
 
@@ -45,7 +45,7 @@ const VisionBoardPage = () => {
       />
 
       {/* Add form */}
-      <AddVisionItemForm onAdd={addItem} defaultTimeframe={activeTimeframe} />
+      <AddVisionItemForm onAdd={addItem} onUploadImage={uploadImage} defaultTimeframe={activeTimeframe} />
 
       {/* Board grid */}
       <VisionBoardGrid

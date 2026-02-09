@@ -9,6 +9,14 @@ export const useTodos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const mapDbTodo = (t: any): Todo => ({
+    id: t.id,
+    text: t.title,
+    completed: t.completed,
+    category: t.category as TodoCategory,
+    createdAt: t.created_at,
+  });
+
   const fetchTodos = useCallback(async () => {
     if (!coupleId) {
       setTodos([]);
@@ -24,15 +32,7 @@ export const useTodos = () => {
     if (error) {
       console.error('Error fetching todos:', error);
     } else {
-      setTodos(
-        (data || []).map((t: any) => ({
-          id: t.id,
-          text: t.title,
-          completed: t.completed,
-          category: t.category as TodoCategory,
-          createdAt: t.created_at,
-        }))
-      );
+      setTodos((data || []).map(mapDbTodo));
     }
     setLoading(false);
   }, [coupleId]);
@@ -40,6 +40,37 @@ export const useTodos = () => {
   useEffect(() => {
     fetchTodos();
   }, [fetchTodos]);
+
+  // Real-time subscription
+  useEffect(() => {
+    if (!coupleId) return;
+
+    const channel = supabase
+      .channel('todos-realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'todos', filter: `couple_id=eq.${coupleId}` },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setTodos((prev) => {
+              if (prev.some((t) => t.id === (payload.new as any).id)) return prev;
+              return [mapDbTodo(payload.new), ...prev];
+            });
+          } else if (payload.eventType === 'UPDATE') {
+            setTodos((prev) =>
+              prev.map((t) => (t.id === (payload.new as any).id ? mapDbTodo(payload.new) : t))
+            );
+          } else if (payload.eventType === 'DELETE') {
+            setTodos((prev) => prev.filter((t) => t.id !== (payload.old as any).id));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [coupleId]);
 
   const addTodo = useCallback(async (text: string, category: TodoCategory) => {
     if (!coupleId || !user) {
@@ -54,10 +85,8 @@ export const useTodos = () => {
     });
     if (error) {
       toast({ title: 'Error', description: error.message, variant: 'destructive' });
-    } else {
-      await fetchTodos();
     }
-  }, [coupleId, user, fetchTodos]);
+  }, [coupleId, user]);
 
   const toggleTodo = useCallback(async (id: string) => {
     const todo = todos.find((t) => t.id === id);
@@ -66,20 +95,12 @@ export const useTodos = () => {
       .from('todos')
       .update({ completed: !todo.completed })
       .eq('id', id);
-    if (error) {
-      console.error('Error toggling todo:', error);
-    } else {
-      setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)));
-    }
+    if (error) console.error('Error toggling todo:', error);
   }, [todos]);
 
   const deleteTodo = useCallback(async (id: string) => {
     const { error } = await supabase.from('todos').delete().eq('id', id);
-    if (error) {
-      console.error('Error deleting todo:', error);
-    } else {
-      setTodos((prev) => prev.filter((t) => t.id !== id));
-    }
+    if (error) console.error('Error deleting todo:', error);
   }, []);
 
   const completedCount = todos.filter((t) => t.completed).length;
