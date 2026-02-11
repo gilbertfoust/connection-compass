@@ -13,32 +13,35 @@ interface Profile {
   updated_at: string;
 }
 
+interface CoupleInfo {
+  couple_id: string;
+  partner_name: string;
+  joined_at: string;
+  is_active: boolean;
+}
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
   coupleId: string | null;
+  couples: CoupleInfo[];
   signUp: (email: string, password: string, displayName?: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   linkPartner: (inviteCode: string) => Promise<{ success: boolean; error?: string; partnerName?: string }>;
+  switchCouple: (coupleId: string) => Promise<{ success: boolean; error?: string }>;
   refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-/**
- * AuthProvider manages user session, profile, and couple linkage.
- * - coupleId is derived from the user's profile row and used throughout
- *   the app to scope all shared data queries.
- * - linkPartner() calls the `link_partner` RPC which creates a couples row
- *   and sets couple_id on both partner profiles.
- */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [couples, setCouples] = useState<CoupleInfo[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
@@ -52,34 +55,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const fetchCouples = async () => {
+    const { data, error } = await supabase.rpc('get_user_couples');
+    if (!error && data) {
+      setCouples((data as any) || []);
+    }
+  };
+
   const refreshProfile = async () => {
     if (user) {
-      await fetchProfile(user.id);
+      await Promise.all([fetchProfile(user.id), fetchCouples()]);
     }
   };
 
   useEffect(() => {
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
-          // Use setTimeout to prevent potential deadlocks with Supabase
-          setTimeout(() => fetchProfile(session.user.id), 0);
+          setTimeout(() => {
+            fetchProfile(session.user.id);
+            fetchCouples();
+          }, 0);
         } else {
           setProfile(null);
+          setCouples([]);
         }
         setLoading(false);
       }
     );
 
-    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id);
+        fetchCouples();
       }
       setLoading(false);
     });
@@ -107,6 +119,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOut = async () => {
     await supabase.auth.signOut();
     setProfile(null);
+    setCouples([]);
   };
 
   const linkPartner = async (inviteCode: string) => {
@@ -124,6 +137,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return { success: false, error: result?.error || 'Unknown error' };
   };
 
+  const switchCouple = async (coupleId: string) => {
+    const { data, error } = await supabase.rpc('switch_active_couple', {
+      target_couple_id: coupleId,
+    });
+    if (error) {
+      return { success: false, error: error.message };
+    }
+    const result = data as any;
+    if (result?.success) {
+      await refreshProfile();
+      return { success: true };
+    }
+    return { success: false, error: result?.error || 'Unknown error' };
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -132,10 +160,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         profile,
         loading,
         coupleId: profile?.couple_id ?? null,
+        couples,
         signUp,
         signIn,
         signOut,
         linkPartner,
+        switchCouple,
         refreshProfile,
       }}
     >

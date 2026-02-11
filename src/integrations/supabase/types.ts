@@ -464,6 +464,35 @@ export type Database = {
         }
         Relationships: []
       }
+      user_couples: {
+        Row: {
+          couple_id: string
+          id: string
+          joined_at: string
+          user_id: string
+        }
+        Insert: {
+          couple_id: string
+          id?: string
+          joined_at?: string
+          user_id: string
+        }
+        Update: {
+          couple_id?: string
+          id?: string
+          joined_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_couples_couple_id_fkey"
+            columns: ["couple_id"]
+            isOneToOne: false
+            referencedRelation: "couples"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vision_items: {
         Row: {
           color: string | null
@@ -514,7 +543,12 @@ export type Database = {
     }
     Functions: {
       get_user_couple_id: { Args: { _user_id: string }; Returns: string }
+      get_user_couples: { Args: never; Returns: Json }
       link_partner: { Args: { partner_invite_code: string }; Returns: Json }
+      switch_active_couple: {
+        Args: { target_couple_id: string }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
