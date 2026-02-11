@@ -17,8 +17,8 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1 } },
 });
 
-// Decide basename at runtime so Lovable works at root
-// and GitHub Pages works under /connection-compass
+// Decide basename at runtime so Lovable preview works at root
+// while GitHub Pages works under /connection-compass
 const basename =
   typeof window !== "undefined" && window.location.hostname === "gilbertfoust.github.io" ? "/connection-compass" : "";
 
