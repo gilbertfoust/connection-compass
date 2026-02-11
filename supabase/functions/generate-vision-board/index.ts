@@ -182,9 +182,9 @@ Return ONLY valid JSON:
         });
       }
 
-      const { data: urlData } = supabaseAdmin.storage.from("vision-images").getPublicUrl(fileName);
+      const { data: urlData } = await supabaseAdmin.storage.from("vision-images").createSignedUrl(fileName, 60 * 60 * 24 * 7); // 7 days
 
-      return new Response(JSON.stringify({ ...parsedMeta, imageUrl: urlData.publicUrl }), {
+      return new Response(JSON.stringify({ ...parsedMeta, imageUrl: urlData?.signedUrl ?? null }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

@@ -88,9 +88,9 @@ export const useVisionBoard = () => {
   }, [coupleId]);
 
   const uploadImage = useCallback(async (file: File): Promise<string | null> => {
-    if (!user) return null;
+    if (!user || !coupleId) return null;
     const fileExt = file.name.split('.').pop();
-    const fileName = `${user.id}/${crypto.randomUUID()}.${fileExt}`;
+    const fileName = `${coupleId}/${crypto.randomUUID()}.${fileExt}`;
 
     const { error } = await supabase.storage
       .from('vision-images')
@@ -102,12 +102,12 @@ export const useVisionBoard = () => {
       return null;
     }
 
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = await supabase.storage
       .from('vision-images')
-      .getPublicUrl(fileName);
+      .createSignedUrl(fileName, 60 * 60 * 24 * 7); // 7 day expiration
 
-    return urlData.publicUrl;
-  }, [user]);
+    return urlData?.signedUrl ?? null;
+  }, [user, coupleId]);
 
   const addItem = useCallback(
     async (type: VisionItemType, content: string, timeframe: Timeframe, imageUrl?: string) => {
