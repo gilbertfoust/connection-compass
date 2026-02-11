@@ -13,16 +13,52 @@ serve(async (req) => {
   }
 
   try {
-    const { coupleId } = await req.json();
+    // Authenticate the caller
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Derive coupleId from authenticated user instead of accepting from request body
+    const { data: profile } = await supabaseClient
+      .from("profiles")
+      .select("couple_id")
+      .eq("user_id", user.id)
+      .single();
+
+    if (!profile?.couple_id) {
+      return new Response(
+        JSON.stringify({ error: "Link a partner first to generate a vision board." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const coupleId = profile.couple_id;
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseAdmin = createClient(supabaseUrl, supabaseKey);
 
     // Fetch the couple's vision items
-    const { data: visionItems, error } = await supabase
+    const { data: visionItems, error } = await supabaseAdmin
       .from("vision_items")
       .select("*")
       .eq("couple_id", coupleId)
@@ -123,7 +159,6 @@ Return ONLY valid JSON:
 
     if (!imageResponse.ok) {
       console.error("Image generation failed:", imageResponse.status);
-      // Return metadata without image
       return new Response(JSON.stringify({ ...parsedMeta, imageUrl: null }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -133,11 +168,10 @@ Return ONLY valid JSON:
     const base64Image = imageData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
 
     if (base64Image) {
-      // Upload to Supabase storage
       const imageBytes = Uint8Array.from(atob(base64Image.split(",")[1] || base64Image), (c) => c.charCodeAt(0));
       const fileName = `generated/${coupleId}/${Date.now()}.png`;
 
-      const { error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabaseAdmin.storage
         .from("vision-images")
         .upload(fileName, imageBytes, { contentType: "image/png", upsert: true });
 
@@ -148,7 +182,7 @@ Return ONLY valid JSON:
         });
       }
 
-      const { data: urlData } = supabase.storage.from("vision-images").getPublicUrl(fileName);
+      const { data: urlData } = supabaseAdmin.storage.from("vision-images").getPublicUrl(fileName);
 
       return new Response(JSON.stringify({ ...parsedMeta, imageUrl: urlData.publicUrl }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },

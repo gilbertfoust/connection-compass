@@ -33,7 +33,7 @@ export const useVisionBoardAI = () => {
 
     try {
       const { data, error } = await supabase.functions.invoke('generate-vision-board', {
-        body: { coupleId },
+        body: {},
       });
 
       if (error) throw new Error(error.message);
