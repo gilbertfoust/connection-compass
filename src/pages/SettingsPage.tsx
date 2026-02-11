@@ -5,15 +5,17 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import {
   Copy, Heart, Link2, Check, UserPlus, LogOut, User, Sparkles, ChevronDown, ChevronUp,
+  ArrowRightLeft,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import ProfileQuestionnaire from '@/components/profile/ProfileQuestionnaire';
 
 const SettingsPage = () => {
-  const { profile, signOut, linkPartner, coupleId } = useAuth();
+  const { profile, signOut, linkPartner, switchCouple, coupleId, couples } = useAuth();
   const [inviteCode, setInviteCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [switching, setSwitching] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
@@ -37,6 +39,17 @@ const SettingsPage = () => {
     }
     setLoading(false);
     setInviteCode('');
+  };
+
+  const handleSwitch = async (targetCoupleId: string) => {
+    setSwitching(targetCoupleId);
+    const result = await switchCouple(targetCoupleId);
+    if (result.success) {
+      toast({ title: 'Switched! ✨', description: 'Your active partner profile has been updated.' });
+    } else {
+      toast({ title: 'Switch failed', description: result.error, variant: 'destructive' });
+    }
+    setSwitching(null);
   };
 
   return (
@@ -67,59 +80,100 @@ const SettingsPage = () => {
         </CardContent>
       </Card>
 
+      {/* Couple Switcher — shown if user has multiple couples */}
+      {couples.length > 1 && (
+        <Card className="border-0 shadow-card">
+          <CardContent className="p-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <ArrowRightLeft className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-foreground">Your Partner Profiles</span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Switch between partner profiles. Each has its own shared data.
+            </p>
+            <div className="space-y-2">
+              {couples.map((c) => (
+                <div key={c.couple_id} className="flex items-center gap-3 py-1.5">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${c.is_active ? 'bg-primary/20' : 'bg-muted'}`}>
+                    <Heart className={`h-4 w-4 ${c.is_active ? 'text-primary fill-primary' : 'text-muted-foreground'}`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-foreground">{c.partner_name}</p>
+                    <p className="text-[10px] text-muted-foreground">
+                      {c.is_active ? 'Active' : 'Tap to switch'}
+                    </p>
+                  </div>
+                  {c.is_active ? (
+                    <Check className="h-4 w-4 text-primary shrink-0" />
+                  ) : (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs h-7"
+                      onClick={() => handleSwitch(c.couple_id)}
+                      disabled={switching === c.couple_id}
+                    >
+                      {switching === c.couple_id ? '...' : 'Switch'}
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Partner Link Section */}
       {coupleId ? (
         <div className="flex items-center gap-2 bg-primary/5 border border-primary/10 rounded-2xl px-4 py-2.5">
           <Heart className="h-4 w-4 text-primary fill-primary shrink-0" />
           <span className="text-xs text-foreground">You're connected with your partner — all shared data syncs in real time ✨</span>
         </div>
-      ) : (
-        <>
-          {/* Your Invite Code */}
-          <Card className="border-0 shadow-card gradient-card">
-            <CardContent className="p-4 space-y-3">
-              <div className="flex items-center gap-2">
-                <Link2 className="h-4 w-4 text-primary" />
-                <span className="text-sm font-semibold text-foreground">Your Invite Code</span>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Share this code with your partner to link your accounts.
-              </p>
-              <div className="flex items-center gap-2">
-                <div className="flex-1 bg-card rounded-xl px-4 py-2.5 text-center">
-                  <span className="text-lg font-mono font-bold tracking-widest text-foreground">
-                    {profile?.invite_code || '...'}
-                  </span>
-                </div>
-                <Button variant="outline" size="icon" onClick={copyCode} className="shrink-0 rounded-xl">
-                  {copied ? <Check className="h-4 w-4 text-primary" /> : <Copy className="h-4 w-4" />}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+      ) : null}
 
-          {/* Enter Partner Code */}
-          <Card className="border-0 shadow-card">
-            <CardContent className="p-4 space-y-3">
-              <div className="flex items-center gap-2">
-                <UserPlus className="h-4 w-4 text-primary" />
-                <span className="text-sm font-semibold text-foreground">Enter Partner's Code</span>
-              </div>
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Enter invite code"
-                  value={inviteCode}
-                  onChange={(e) => setInviteCode(e.target.value)}
-                  className="font-mono tracking-wider"
-                />
-                <Button onClick={handleLink} disabled={!inviteCode.trim() || loading}>
-                  {loading ? '...' : 'Link'}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </>
-      )}
+      {/* Your Invite Code — always show so user can link new partners */}
+      <Card className="border-0 shadow-card gradient-card">
+        <CardContent className="p-4 space-y-3">
+          <div className="flex items-center gap-2">
+            <Link2 className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">Your Invite Code</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Share this code with a partner to create a new linked profile. Each code is single-use.
+          </p>
+          <div className="flex items-center gap-2">
+            <div className="flex-1 bg-card rounded-xl px-4 py-2.5 text-center">
+              <span className="text-lg font-mono font-bold tracking-widest text-foreground">
+                {profile?.invite_code || '...'}
+              </span>
+            </div>
+            <Button variant="outline" size="icon" onClick={copyCode} className="shrink-0 rounded-xl">
+              {copied ? <Check className="h-4 w-4 text-primary" /> : <Copy className="h-4 w-4" />}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Enter Partner Code */}
+      <Card className="border-0 shadow-card">
+        <CardContent className="p-4 space-y-3">
+          <div className="flex items-center gap-2">
+            <UserPlus className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">Enter Partner's Code</span>
+          </div>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Enter invite code"
+              value={inviteCode}
+              onChange={(e) => setInviteCode(e.target.value)}
+              className="font-mono tracking-wider"
+            />
+            <Button onClick={handleLink} disabled={!inviteCode.trim() || loading}>
+              {loading ? '...' : 'Link'}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       <Separator />
 
