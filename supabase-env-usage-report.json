@@ -1,0 +1,122 @@
+[
+  {
+    "file": "src/integrations/supabase/client.ts",
+    "line": 5,
+    "environmentStatus": "Partially safe",
+    "explanation": "Reads VITE_SUPABASE_URL from Vite env at build/runtime. README documents it as required, but there is no runtime guard in code; missing value can still pass build and fail when createClient runs."
+  },
+  {
+    "file": "src/integrations/supabase/client.ts",
+    "line": 6,
+    "environmentStatus": "Partially safe",
+    "explanation": "Reads VITE_SUPABASE_PUBLISHABLE_KEY from Vite env. It is documented in README, but not validated in code or typed in vite-env.d.ts, so misconfiguration is detected only at runtime."
+  },
+  {
+    "file": "supabase/functions/generate-vision-board/index.ts",
+    "line": 25,
+    "environmentStatus": "Safe on Supabase deploy, unsafe if missing locally",
+    "explanation": "Uses SUPABASE_URL for the edge-function auth client. In Supabase hosted edge runtime this variable is typically injected, but the non-null assertion means local/manual runtimes will crash if not provided."
+  },
+  {
+    "file": "supabase/functions/generate-vision-board/index.ts",
+    "line": 26,
+    "environmentStatus": "Safe on Supabase deploy, unsafe if missing locally",
+    "explanation": "Uses SUPABASE_ANON_KEY for caller-auth validation. Generally injected in Supabase edge runtime; no explicit fallback or guard is present for other environments."
+  },
+  {
+    "file": "supabase/functions/generate-vision-board/index.ts",
+    "line": 56,
+    "environmentStatus": "Safe on Supabase deploy, unsafe if missing locally",
+    "explanation": "Reuses SUPABASE_URL for admin client construction. Non-null assertion assumes env is present."
+  },
+  {
+    "file": "supabase/functions/generate-vision-board/index.ts",
+    "line": 57,
+    "environmentStatus": "Partially safe",
+    "explanation": "Reads SUPABASE_SERVICE_ROLE_KEY. README marks it required for this function, but code does not validate before use; runtime failure occurs if secret is absent or incorrect."
+  },
+  {
+    "file": "supabase/functions/suggest-dates/index.ts",
+    "line": 25,
+    "environmentStatus": "Safe on Supabase deploy, unsafe if missing locally",
+    "explanation": "Uses SUPABASE_URL for user-authenticated edge-function client; relies on injected env and non-null assertion."
+  },
+  {
+    "file": "supabase/functions/suggest-dates/index.ts",
+    "line": 26,
+    "environmentStatus": "Safe on Supabase deploy, unsafe if missing locally",
+    "explanation": "Uses SUPABASE_ANON_KEY for auth context; no explicit validation in code."
+  },
+  {
+    "file": "supabase/functions/analyze-triggers/index.ts",
+    "line": 23,
+    "environmentStatus": "Safe on Supabase deploy, unsafe if missing locally",
+    "explanation": "Uses SUPABASE_URL for edge-function auth client with non-null assertion."
+  },
+  {
+    "file": "supabase/functions/analyze-triggers/index.ts",
+    "line": 24,
+    "environmentStatus": "Safe on Supabase deploy, unsafe if missing locally",
+    "explanation": "Uses SUPABASE_ANON_KEY for edge-function auth client with no fallback handling."
+  },
+  {
+    "file": "supabase/functions/analyze-conversation/index.ts",
+    "line": 25,
+    "environmentStatus": "Safe on Supabase deploy, unsafe if missing locally",
+    "explanation": "Uses SUPABASE_URL for edge-function auth client; assumed present by non-null assertion."
+  },
+  {
+    "file": "supabase/functions/analyze-conversation/index.ts",
+    "line": 26,
+    "environmentStatus": "Safe on Supabase deploy, unsafe if missing locally",
+    "explanation": "Uses SUPABASE_ANON_KEY for edge-function auth client; assumed present by non-null assertion."
+  },
+  {
+    "file": "README.md",
+    "line": 121,
+    "environmentStatus": "Safe if followed",
+    "explanation": "Local setup instructions explicitly define VITE_SUPABASE_URL before running the app."
+  },
+  {
+    "file": "README.md",
+    "line": 122,
+    "environmentStatus": "Safe if followed",
+    "explanation": "Local setup instructions explicitly define VITE_SUPABASE_PUBLISHABLE_KEY before running the app."
+  },
+  {
+    "file": "README.md",
+    "line": 133,
+    "environmentStatus": "Documented requirement",
+    "explanation": "Marks VITE_SUPABASE_URL as required, but documentation alone does not enforce it in CI/build pipelines."
+  },
+  {
+    "file": "README.md",
+    "line": 134,
+    "environmentStatus": "Documented requirement",
+    "explanation": "Marks VITE_SUPABASE_PUBLISHABLE_KEY as required, but code does not validate this at startup."
+  },
+  {
+    "file": "README.md",
+    "line": 141,
+    "environmentStatus": "Partially safe",
+    "explanation": "States SUPABASE_SERVICE_ROLE_KEY is required for generate-vision-board; deployment is safe only when this Supabase secret is configured."
+  },
+  {
+    "file": "README.md",
+    "line": 142,
+    "environmentStatus": "Safe on Supabase deploy",
+    "explanation": "Documents SUPABASE_URL for edge functions; this is generally available in Supabase runtime, though local execution still requires proper env setup."
+  },
+  {
+    "file": "src/hooks/useVisionBoardAI.ts",
+    "line": 15,
+    "environmentStatus": "Documentation reference only",
+    "explanation": "Comment references SUPABASE_SERVICE_ROLE_KEY usage server-side; it does not itself read env values."
+  },
+  {
+    "file": "src/hooks/useVisionBoardAI.ts",
+    "line": 17,
+    "environmentStatus": "Documentation reference only",
+    "explanation": "Comment states required Supabase secrets for the edge function; actual enforcement occurs in function runtime behavior."
+  }
+]
