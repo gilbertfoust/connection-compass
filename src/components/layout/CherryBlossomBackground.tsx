@@ -6,8 +6,15 @@ const CherryBlossomBackground = () => {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
-      {/* Warm gradient base */}
-      <div className="absolute inset-0 gradient-soft opacity-60" />
+      {/* Deeper gradient base for contrast against cards */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: isMasculine
+            ? 'linear-gradient(135deg, hsl(220 15% 88%), hsl(240 5% 82%), hsl(220 12% 85%))'
+            : 'linear-gradient(135deg, hsl(333 30% 90%), hsl(240 8% 88%), hsl(351 25% 89%))',
+        }}
+      />
 
       {/* Glow orbs */}
       <div
@@ -18,8 +25,8 @@ const CherryBlossomBackground = () => {
           top: '10%',
           left: '-5%',
           background: isMasculine
-            ? 'hsl(350 45% 40% / 0.12)'
-            : 'hsl(333 71% 50% / 0.12)',
+            ? 'hsl(350 45% 40% / 0.15)'
+            : 'hsl(333 71% 50% / 0.15)',
         }}
       />
       <div
@@ -30,8 +37,8 @@ const CherryBlossomBackground = () => {
           top: '50%',
           right: '-8%',
           background: isMasculine
-            ? 'hsl(220 20% 35% / 0.10)'
-            : 'hsl(351 94% 71% / 0.10)',
+            ? 'hsl(220 20% 35% / 0.12)'
+            : 'hsl(351 94% 71% / 0.12)',
           animation: 'pulse-soft 5s ease-in-out infinite 1.5s',
         }}
       />
@@ -43,13 +50,13 @@ const CherryBlossomBackground = () => {
           bottom: '5%',
           left: '30%',
           background: isMasculine
-            ? 'hsl(350 45% 40% / 0.08)'
-            : 'hsl(327 87% 81% / 0.10)',
+            ? 'hsl(350 45% 40% / 0.10)'
+            : 'hsl(327 87% 81% / 0.14)',
           animation: 'pulse-soft 7s ease-in-out infinite 3s',
         }}
       />
 
-      {/* Subtle floating petals */}
+      {/* More defined floating petals */}
       {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
