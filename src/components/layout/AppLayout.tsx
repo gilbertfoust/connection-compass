@@ -59,7 +59,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         </header>
 
         {/* Mobile Content */}
-        <main className="flex-1 pb-20 overflow-y-auto">
+        <main className="flex-1 pb-20 overflow-y-auto relative z-10">
           <div className="max-w-lg mx-auto px-4 py-6">
             {children}
           </div>
@@ -102,7 +102,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         <CherryBlossomBackground />
         <AppSidebar />
 
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col relative z-10">
           {/* Desktop Header */}
           <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/50 px-4 py-3">
             <div className="flex items-center gap-2">
